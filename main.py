@@ -3,10 +3,14 @@ import requests
 import tweepy
 import configparser
 
+
 config = configparser.ConfigParser()
 config.read('config.ini')
-print('API_Key' in  config)
 
+print(config['twitter']['Access_Token'])
+print(config['twitter']['API_Key'])
+print(config['twitter']['API_Secret_Key'])
+print(config['twitter']['Access_Token_Secret'])
 
 app = FastAPI()
 
@@ -14,16 +18,13 @@ app = FastAPI()
 def index():
     return {'key':'value'}
 
-
 @app.get('/auth')
 def oauth():
-    auth = tweepy.OAuthHandler('API_Key' in config,'API_Secret_Key' in config)
-    auth.set_access_token('Access_Token' in config)
-
+    auth = tweepy.OAuthHandler(config['twitter']['API_Key'], config['twitter']['API_Secret_Key' ])
+    auth.set_access_token(config['twitter']['Access_Token'], config['twitter']['Access_Token_Secret'])
     api = tweepy.API(auth)
     public_tweets = api.home_timeline()
     return api
-
 
 @app.get('/rndtweets')
 def tweets():
