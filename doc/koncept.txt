@@ -1,0 +1,19 @@
+funkcje:
+- słowo per sejm
+- słowo per partia
+- słowo per polityk
+- ostatnie tweety z danym słowem ogólnie/polityk/partia
+
+modele:
+- party
+  > name
+  > logo
+- politician
+  > twitter id
+  > last update
+  > party id
+- word
+  > date
+  > word
+  > politician id
+  > count
