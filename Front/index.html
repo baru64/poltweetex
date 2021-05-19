@@ -5,23 +5,49 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://unpkg.com/vue@3.0.2"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
         <title>Vue starter</title>
+        <script src="app.js" defer></script>
     </head>
     <body>
         <div id = "Message">
             <p>{{message}}</p>
         </div>
-        <!-- <div id = "Reverse">
-            <p>{{message}}</p>
-            <button v-on:click ="reverseMessage"> Reverse Message</button>
+        <div id = "Reverse">
+            <p>{{message2}}</p>
+            <button type="button" class ="btn btn-primary" v-on:click ="reverseMessage"> Reverse Message</button>
+        </div>
+        <div id = "Input field">
+            <input type="text" class = "input">
+        </div>
+        <div class ='buttons-center'>
+            <button class="button is-success is-light">Sejm</button>
+            <button class="button is-success is-light">Polityk</button>
+            <button class="button is-success is-light">Partia</button>
         </div>
 
-        <div id ="Request">
-            <p>{{message}}</p>
-            <button v-on:click ="getRequest">Practice get Request</button>
-        </div> -->
-
-        <script src="app.js"></script>
+        <table class="table">
+            <thead>
+              <tr>
+                <th><abbr title="Numers">Nr</abbr></th>
+                <th>Polityk</th>
+                <th><abbr title="Party">Partia</abbr></th>
+                <th><abbr title="Word">Słowo</abbr></th>
+                <th><abbr title="Last_TT">Last Tweet</abbr></th>
+                <th><abbr title="TweetCount">Nr of Tweets</abbr></th>
+              </tr>
+            </thead>
+            <tbody>
+                <th>1</th>
+                <td><p>Filip Piwowarczyk</p>
+                </td>
+                <td>Husaria</td>
+                <td>Kurde</td>
+                <td>20:10 2021.03.04</td>
+                <td>3</td>
+              </tr>
+            </tbody>
+          </table>
     </body>
 
 </html>

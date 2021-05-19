@@ -1,6 +1,13 @@
 p{
-    color: red;
-    font-size: 30;
-    position: fixed;
-    margin-left: 1em;
+    color: black;
+}
+
+.search-field{
+   align-items: center; 
+}
+
+.buttons-center{
+    margin: auto;
+    width: 100%;
+    padding: 10px;
 }
