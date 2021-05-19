@@ -1,42 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Vue starter</title>
-        <script src="https://unpkg.com/vue"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-        <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> For production -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/vue@3.0.2"></script>
+       <title>Vue starter</title>
+
     </head>
     <body>
-        <div id = "app">
-            {{message}}
+        <!-- <div id = "Message">
+            <p>{{message}}</p>
         </div>
-
-        <div id = "app1">
+        <div id = "Reverse">
             <p>{{message}}</p>
             <button v-on:click ="reverseMessage"> Reverse Message</button>
         </div>
 
-        <script>
-            var app = new Vue({
-                el: '#app',
-                data :{
-                    message:'Hello Vue!'
-                }
-            })
+        <div id ="Request">
+            <p>{{message}}</p>
+            <button v-on:click ="getRequest">Practice get Request</button>
+        </div> -->
 
-            var app = new Vue({
-                el:`#app1`,
-                data: {
-                    message: 'Hello Vue.js!'
-                },
-                methods: {
-                    reverseMessage: function(){
-                        this.message = this.message.split('').reverse().join('');
-                    }
-                }
-            })
-        </script>
-
-
+        <script scr="app.js"></script>
     </body>
+
 </html>
