@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vue starter</title>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> For production -->
+    </head>
+    <body>
+        <div id = "app">
+            {{message}}
+        </div>
+
+        <div id = "app1">
+            <p>{{message}}</p>
+            <button v-on:click ="reverseMessage"> Reverse Message</button>
+        </div>
+
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data :{
+                    message:'Hello Vue!'
+                }
+            })
+
+            var app = new Vue({
+                el:`#app1`,
+                data: {
+                    message: 'Hello Vue.js!'
+                },
+                methods: {
+                    reverseMessage: function(){
+                        this.message = this.message.split('').reverse().join('');
+                    }
+                }
+            })
+        </script>
+
+
+    </body>
+</html>
