@@ -13,7 +13,7 @@ AWS
 https://docs.google.com/spreadsheets/d/1vLtqd11J_ufGP2WarwFaq-IoWY_vZqYBoTFLE01fGKU/edit#gid=0
 
 
-# How to run
+# How to run API
 
 ``` Bash
 > pipenv install 

@@ -10,23 +10,23 @@
         <script src="app.js" defer></script>
     </head>
     <body>
-        <div id = "Message">
-            <p>{{message}}</p>
-        </div>
-        <div id = "Reverse">
-            <p>{{message2}}</p>
-            <button type="button" class ="btn btn-primary" v-on:click ="reverseMessage"> Reverse Message</button>
-        </div>
-        <div id = "Input field">
-            <input type="text" class = "input">
-        </div>
-        <div class ='buttons-center'>
-            <button class="button is-success is-light">Sejm</button>
-            <button class="button is-success is-light">Polityk</button>
-            <button class="button is-success is-light">Partia</button>
+
+        <div class="column is-8 is-offset-1" id="Search">
+            <div id = "Title">
+                <p class='column title'>{{title}}</p>
+            </div>  
+            <div id = "Input field" class = "columns">
+                <input class = "column input" v-model="word" placeholder="Search for word">
+                <button class = "button is-2" @click="sumitSearch(word)">Submit</button>
+            </div> 
+            <div>
+                <button class="button is-success is-light" @click="changeTitle('Sejm')">Sejm</button>
+                <button class="button is-success is-light" @click="changeTitle('Polityk')">Polityk</button>
+                <button class="button is-success is-light" @click="changeTitle('Posel')">Poseł</button>
+            </div> 
         </div>
 
-        <table class="table">
+        <table class="table column is-9 is-offset-1 myTable">
             <thead>
               <tr>
                 <th><abbr title="Numers">Nr</abbr></th>
@@ -38,16 +38,20 @@
               </tr>
             </thead>
             <tbody>
-                <th>1</th>
-                <td><p>Filip Piwowarczyk</p>
-                </td>
-                <td>Husaria</td>
-                <td>Kurde</td>
-                <td>20:10 2021.03.04</td>
-                <td>3</td>
-              </tr>
+                <div id ="Table">
+                    <tr v-for = "tweet in tweets">
+                        <th>1</th>
+                        <td><p>Filip Piwowarczyk</p>
+                        </td>
+                        <td>Husaria</td>
+                        <td>Kurde</td>
+                        <td>20:10 2021.03.04</td>
+                        <td>3</td>
+                    </tr>
+                </div>
             </tbody>
           </table>
+          
     </body>
 
 </html>

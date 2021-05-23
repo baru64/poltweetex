@@ -1,10 +1,21 @@
-
-
 const app = Vue.createApp({
-    data (){
-        return {
-            message: 'Message Injection',
-            message2: 'Message in other div'
+    data(){
+        return{
+            word: '',
+            title: 'Title',
+            sejm: 'Sejm',
+            polityk: 'Polityk',
+            posel: 'Poseł',
+        }
+        
+    },
+    methods: {
+        sumitSearch(word){
+            console.log(word);
+            this.word = '';
+        },
+        changeTitle(buttonName){
+            this.title = buttonName;
         }
     }
     
@@ -14,7 +25,10 @@ const app = Vue.createApp({
 const app2 = Vue.createApp({
     data (){
         return {
-            message2: 'Message in other div'
+            tweets: [
+                {nr: 1, name: 'Filip', surname: 'Piwowarczyk', party: 'Husaria', word: 'Kurde', lastTT:'20:10 2021.03.04', count: 3},
+                {nr: 2, name: 'Filip', surname: 'Piwowarczyk', party: 'Husaria', word: 'Kurde', lastTT:'20:10 2021.03.04', count: 5}
+            ]
         }
     },
     methods: {
@@ -24,11 +38,6 @@ const app2 = Vue.createApp({
     }
 
 })
-
-app.mount('#Message')
-app2.mount('#Reverse')
-// app1.mount('#Reverse')
-// app2.mount('#Request')
-
-
+app.mount("#Search")
+app2.mount('#Table')
 
