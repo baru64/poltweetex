@@ -4,3 +4,6 @@ config.ini
 *.pyc
 .vim
 /Front/node_modules
+pulumi/venv
+pulumi/bin/
+pulumi/node_modules/
