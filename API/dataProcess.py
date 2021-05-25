@@ -39,10 +39,6 @@ def modifyTweets(tweet):
     tweet = removePutationMarks(tweet)
     return tweet
 
-
-
-
-
 # Code for clearing data 
 searchWord = 'samolot'
 for tweet in randomTweets:
