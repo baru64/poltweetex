@@ -5,6 +5,6 @@ config.ini
 .vim
 /Front/node_modules
 /.vscode
-pulumi/venv
-pulumi/bin/
-pulumi/node_modules/
+venv
+bin
+node_modules
