@@ -23,13 +23,13 @@
                 <button class="button is-info is-light" @click="getPoselsFromSejm()">Posełowie</button>
             </div> 
             <div class = "buttons" v-if = "showParties">
-                <button class="button is-info is-light" v-for="party in parties" @click="getPoselsFromParty(party.name)">{{party.name}}</button>
+                <button class="button is-warning is-light" v-for="party in parties" @click="getPoselsFromParty(party.name)">{{party.name}}</button>
             </div>
             <div class = "buttons" v-if = showPoliticsFromParty>
-                <button class="button is-info is-light" v-for = "politic in politics" @click="getPoliticainWords()">{{politic.name}} {{politic.surname}} z {{party}}</button>
+                <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords()">{{politic.name}} {{politic.surname}} z {{party}}</button>
             </div>
             <div class = "buttons" v-if = showPoliticsFromSejm>
-                <button class="button is-info is-light" v-for = "politic in politics" @click="getPoliticainWords()">{{politic.name}} {{politic.surname}} z {{party}}</button>
+                <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords()">{{politic.name}} {{politic.surname}} z {{party}}</button>
             </div>
         </div>
 

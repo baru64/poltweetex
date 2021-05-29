@@ -11,18 +11,20 @@
 
 .title{
     text-align: center;
+    text-shadow: 1px 1px 2px black;
 }
 
 body{
-
-    height: 10000mm;
-    background-color: 	#1DA1F2;
+    height: 1600px;
+    background-color: 	#47b1f3;
     max-width: 10000px;
     margin: 20px auto;
+    padding-bottom: 50px;
 
 }
 
 .myTable{
+    border-radius: 4px;
     background-color: wheat;
 }
 

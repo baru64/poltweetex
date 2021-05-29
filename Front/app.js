@@ -34,34 +34,31 @@ const app = Vue.createApp({
             console.log(word);
             this.word = '';
         },
-        changeTitle(buttonName){
-            this.title = buttonName;
-
-        },
         getSejm(){
-            console.log("Get All words in Sejm");
+            console.log("Get All words from DB");
             resetState(this);
         },
         getParty(){
-            console.log("Get Words in Party and show Politics of Party");
-            this.showParties = !this.showParties;
+            console.log("Get Parties from DB");
+            console.log("Get Words for Party from DB");
             this.showPoliticsFromSejm = false;
+            this.showParties = !this.showParties;
         },
         getPoselsFromParty(party){
-            console.log("Get Posels From");
+            console.log("Get Posels in Party from DB");
             this.showPoliticsFromSejm = false;
-            this.showPoliticsFromParty = true;
             this.party = party
+            this.showPoliticsFromParty = true;
         },
         getPoselsFromSejm(){
-            console.log("Get Posels From Sejm");
+            console.log("Get Posels in Sejm from DB");
             this.party = 'Sejm';
             this.showParties = false;
             this.showPoliticsFromParty = false;
             this.showPoliticsFromSejm = true;
         },
         getPoliticainWords(){
-            console.log("Output Politican Words");
+            console.log("Get All word for given politician from DB");
         }
     }
 });
