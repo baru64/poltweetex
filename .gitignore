@@ -4,4 +4,10 @@ config.ini
 *.pyc
 .vim
 /Front/node_modules
+<<<<<<< HEAD
 /.vscode
+=======
+pulumi/venv
+pulumi/bin/
+pulumi/node_modules/
+>>>>>>> e1b8a56170405559424c3bc9632f4c35ef83687f
