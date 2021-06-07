@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as resources from "@pulumi/azure-native/resources";
 import * as storage from "@pulumi/azure-native/storage";
 import * as web from "@pulumi/azure-native/web";
+import * as sql from "@pulumi/azure-native/sql"
 
 // Create an Azure Resource Group
 const resourceGroup = new resources.ResourceGroup("resourceGroup");
@@ -59,7 +60,12 @@ const pythonApp = new web.WebApp("httppython", {
     },
 });
 
-function signedBlobReadUrl(blob: storage.Blob, container: storage.BlobContainer, account: storage.StorageAccount, resourceGroup: resources.ResourceGroup): pulumi.Output<string> {
+function signedBlobReadUrl(
+    blob: storage.Blob,
+    container: storage.BlobContainer,
+    account: storage.StorageAccount,
+    resourceGroup: resources.ResourceGroup
+): pulumi.Output<string> {
     const blobSAS = pulumi.all<string>([blob.name, container.name, account.name, resourceGroup.name]).apply(args =>
         storage.listStorageAccountServiceSAS({
             accountName: args[2],
@@ -78,5 +84,22 @@ function signedBlobReadUrl(blob: storage.Blob, container: storage.BlobContainer,
 
     return pulumi.interpolate`https://${account.name}.blob.core.windows.net/${container.name}/${blob.name}?${blobSAS.serviceSasToken}`;
 }
+
+const dbserver = new sql.Server("dbserver2", {
+    administratorLogin: "dummylogin",
+    administratorLoginPassword: "asdfnewr134ss3!@11f4265sassdfcxvzew4sf-23",
+    resourceGroupName: resourceGroup.name,
+    serverName: "twitterdbserver2",
+});
+
+
+const database = new sql.Database("tweetdb", {
+    databaseName: "tweetdb",
+    resourceGroupName: resourceGroup.name,
+    serverName: dbserver.name,
+    sku: {
+        name: "S0",
+    },
+});
 
 export const pythonEndpoint = pythonApp.defaultHostName.apply(ep => `https://${ep}/api/apifunction?name=Pulumi`);
