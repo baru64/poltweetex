@@ -21,6 +21,27 @@ const storageAccountKeys = pulumi.all([resourceGroup.name, storageAccount.name])
     storage.listStorageAccountKeys({ resourceGroupName, accountName }));
 export const primaryStorageKey = storageAccountKeys.keys[0].value;
 
+const dblogin = "dummylogin";
+const dbpwd = "asdfnewr134ss3!@11f4265sassdfcxvzew4sf-23"
+
+// Create database server and database
+const dbserver = new sql.Server("dbserver2", {
+    administratorLogin: dblogin,
+    administratorLoginPassword: dbpwd,
+    resourceGroupName: resourceGroup.name,
+    serverName: "twitterdbserver2",
+});
+
+
+const database = new sql.Database("tweetdb", {
+    databaseName: "tweetdb",
+    resourceGroupName: resourceGroup.name,
+    serverName: dbserver.name,
+    sku: {
+        name: "S0",
+    },
+});
+
 const linuxPlan = new web.AppServicePlan("linux-asp", {
     resourceGroupName: resourceGroup.name,
     kind: "Linux",
@@ -56,7 +77,10 @@ const pythonApp = new web.WebApp("httppython", {
             { name: "FUNCTIONS_WORKER_RUNTIME", value: "python" },
             { name: "WEBSITE_RUN_FROM_PACKAGE", value: pythonBlobSignedURL },
             { name: "FUNCTIONS_EXTENSION_VERSION", value: "~3" },
-        ],
+            { name: "DATABASE_CONNECTION",
+              value: pulumi.all([dbserver.name, database.name]).apply(([server, db]) =>                   
+                `Server=tcp:${server}.database.windows.net;initial catalog=${db};user ID=${dblogin};password=${dbpwd};Min Pool Size=0;Max Pool Size=30;Persist Security Info=true;`) }
+        ]
     },
 });
 
@@ -84,22 +108,5 @@ function signedBlobReadUrl(
 
     return pulumi.interpolate`https://${account.name}.blob.core.windows.net/${container.name}/${blob.name}?${blobSAS.serviceSasToken}`;
 }
-
-const dbserver = new sql.Server("dbserver2", {
-    administratorLogin: "dummylogin",
-    administratorLoginPassword: "asdfnewr134ss3!@11f4265sassdfcxvzew4sf-23",
-    resourceGroupName: resourceGroup.name,
-    serverName: "twitterdbserver2",
-});
-
-
-const database = new sql.Database("tweetdb", {
-    databaseName: "tweetdb",
-    resourceGroupName: resourceGroup.name,
-    serverName: dbserver.name,
-    sku: {
-        name: "S0",
-    },
-});
 
 export const pythonEndpoint = pythonApp.defaultHostName.apply(ep => `https://${ep}/api/apifunction?name=Pulumi`);
