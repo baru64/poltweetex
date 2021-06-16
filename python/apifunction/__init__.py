@@ -27,9 +27,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             new_word = models.WordIndex(word="maupa")
             db.add(new_word)
             db.commit()
-            nasze_dziedzictwo = db.query(models.WordIndex)
+            indeks = db.query(models.WordIndex).first()
         return func.HttpResponse(
-            f"Hello from Python, {name}! Indeks: {str(nasze_dziedzictwo)}"
+            f"Hello from Python, {name}! Indeks: {str(indeks)}"
         )
     else:
         return func.HttpResponse(

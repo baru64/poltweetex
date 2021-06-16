@@ -79,7 +79,11 @@ const pythonApp = new web.WebApp("httppython", {
             { name: "FUNCTIONS_EXTENSION_VERSION", value: "~3" },
             { name: "DATABASE_CONNECTION",
               value: pulumi.all([dbserver.name, database.name]).apply(([server, db]) =>                   
-                `Server=tcp:${server}.database.windows.net;initial catalog=${db};user ID=${dblogin};password=${dbpwd};Min Pool Size=0;Max Pool Size=30;Persist Security Info=true;`) }
+                `Server=tcp:${server}.database.windows.net;initial catalog=${db};user ID=${dblogin};password=${dbpwd};Min Pool Size=0;Max Pool Size=30;Persist Security Info=true;`) },
+            { name: "DATABASE_LOGIN", value: dblogin },
+            { name: "DATABASE_PASSWD", value: dbpwd },
+            { name: "DATABASE_SERVER", value: `${dbserver.name}.database.windows.net` },
+            { name: "DATABASE_NAME", value: database.name }
         ]
     },
 });
