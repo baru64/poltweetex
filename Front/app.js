@@ -58,7 +58,8 @@ const app = Vue.createApp({
             this.showPoliticsFromSejm = true;
         },
         getPoliticainWords(){
-            console.log("Get All word for given politician from DB");
+            fetch("http://127.0.0.1:8000/rndtweets")
+            .then(response => response.json)
         }
     }
 });
