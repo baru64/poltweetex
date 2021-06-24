@@ -48,7 +48,7 @@ def main():
 
 
 def replaceUnwantedSigns(sentence):
-    polishSigns = {'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n',
+    polishSigns = {'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', '…': '',
                    'ó': 'o', 'ś': 's', 'ż': 'z', 'ź': 'z', '”': '', "„": ""}
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     for sign in polishSigns:
