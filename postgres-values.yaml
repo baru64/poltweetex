@@ -396,7 +396,7 @@ persistence:
   ## The path the volume will be mounted at, useful when using different
   ## PostgreSQL images.
   ##
-  mountPath: /bitnami/postgresql
+  mountPath: /bitnami/
 
   ## The subdirectory of the volume to mount to, useful in dev environments
   ## and one PV for multiple services.
