@@ -15,7 +15,7 @@ app = FastAPI()
 @app.on_event("startup")
 async def startup_event():
     things = None
-    with open('/etc/config/things.json', 'r') as json_file:
+    with open('./app/data/things.json', 'r') as json_file:
         things = json.load(json_file)
     with SessionLocal() as db:
         crud.delete_all_items(db)
@@ -26,7 +26,6 @@ async def startup_event():
             )
             db.add(new_thing)
         db.commit()
-
 
 # dependency
 def get_db():
