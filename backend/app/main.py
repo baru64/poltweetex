@@ -59,7 +59,7 @@ def read_parties(skip: int = 0,
     return parties
 
 
-@app.get("/politicians", response_model=List[schemas.Politician])
+@app.get("/politicians", response_model=List[models.Politician])
 def read_politicians(skip: int = 0,
                      limit: int = 100,
                      db: Session = Depends(get_db)):
