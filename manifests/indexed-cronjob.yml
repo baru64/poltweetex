@@ -21,3 +21,7 @@ spec:
                 secretKeyRef:
                   key: postgresql-password
                   name: postgres-password
+            - name: JOB_COMPLETION_INDEX
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
