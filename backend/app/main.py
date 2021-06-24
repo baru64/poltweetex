@@ -14,7 +14,6 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-<<<<<<< HEAD
 @app.on_event("startup")
 async def startup_event():
     with open("./app/data/parties.json", 'r') as politicians_json:
@@ -37,33 +36,8 @@ async def startup_event():
                 db.add(new_politician)
             db.add(new_party)
         db.commit()
-=======
-# @app.on_event("startup")
-# async def startup_event():
-#     with open("./app/data/parties.json",'r') as politicians_json:
-#         parties = json.load(politicians_json)
-#     with SessionLocal() as db:
-#         crud.delete_all_parties(db)
-#         crud.delete_all_politicians(db)
-#         for party in parties:
-#             new_party = models.Party(
-#                 id = party["party_ID"],
-#                 name = party['Party']
-#             )
-#             for politician in party["Politicians"]:
-#                 new_politician = models.Politician(
-#                     twitter_id=politician['ID'],
-#                     name = politician['Name'],
-#                     party_id=party["party_ID"]
-#                 )
-#                 db.add(new_politician)
-#             db.add(new_party)
-#         db.commit()
->>>>>>> 564b1b6623042f7ef6de20135d1e5d3a3200ef2a
 
 # dependency
-
-
 def get_db():
     db = SessionLocal()
     try:
