@@ -50,7 +50,7 @@ def delete_all_politicians(db: Session):
 
 
 def get_words(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Word).offset(skip).limit(limit).all()
+    return db.query(models.Word).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
 
 # WordIndex crud
 
