@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-api
-        image: exampleregistry19062021.azurecr.io/myimage
+        image: poltweetexregistry.azurecr.io/myimage
         env:
         - name: POSTGRESQL_PASSWORD
           valueFrom:
