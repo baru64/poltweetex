@@ -1,5 +1,4 @@
 import os
-import configparser
 import tweepy
 import string
 
@@ -8,14 +7,10 @@ from .database import SessionLocal
 
 # INDEX = int(os.environ['JOB_COMPLETION_INDEX'])
 
-config = configparser.ConfigParser()
-config.read('worker/config.ini')
 
-
-auth = tweepy.OAuthHandler(
-    os.environ('API_Key'), os.environ('API_Secret_Key'))
-auth.set_access_token(os.environ('Access_Token'),
-                      os.environ('Access_Token_Secret'))
+auth = tweepy.OAuthHandler(os.environ['API_Key'], os.environ['API_Secret_Key'])
+auth.set_access_token(os.environ['Access_Token'],
+                      os.environ['Access_Token_Secret'])
 twitterAPI = tweepy.API(auth)
 
 
