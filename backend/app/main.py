@@ -1,9 +1,9 @@
 from typing import List
 import json
-from datetime import datetime, date
+from datetime import date
 
 from fastapi import Depends, FastAPI
-from sqlalchemy.orm import Session, query
+from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
@@ -37,6 +37,7 @@ async def startup_event():
             db.add(new_party)
         db.commit()
 
+
 # dependency
 def get_db():
     db = SessionLocal()
@@ -59,7 +60,7 @@ def read_parties(skip: int = 0,
     return parties
 
 
-@app.get("/politicians", response_model=List[models.Politician])
+@app.get("/politicians", response_model=List[schemas.Politician])
 def read_politicians(skip: int = 0,
                      limit: int = 100,
                      db: Session = Depends(get_db)):
