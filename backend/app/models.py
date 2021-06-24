@@ -20,6 +20,7 @@ class Politician(Base):
     __tablename__ = "politicians"
 
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String,index=True)
     twitter_ID = Column(String, index=True)
     party_ID = Column(Integer,index=True)
 
