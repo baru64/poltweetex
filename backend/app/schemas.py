@@ -44,6 +44,7 @@ class WordBase(BaseModel):
     politician_id: str
     tweet_id: str
     count: int
+    date: datetime
 
 
 class WordCreate(WordBase):

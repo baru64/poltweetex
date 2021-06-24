@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 # Party schema
 
@@ -24,7 +25,7 @@ class PoliticianBase(BaseModel):
     name: str
     twitter_id: str
     party_id: int
-    last_update: str
+    last_update: datetime
 
 
 class PoliticianCreate(PoliticianBase):
@@ -43,6 +44,7 @@ class WordBase(BaseModel):
     politician_id: int
     tweet_id: str
     count: int
+    date: datetime
 
 
 class WordCreate(WordBase):

@@ -27,6 +27,7 @@ class Word(Base):
     politician_id = Column(String, index=True)
     tweet_id = Column(String, index=True)
     count = Column(Integer, index=True)
+    date = Column(DateTime, inted=True)
 
 
 class WordIndex(Base):
