@@ -95,10 +95,10 @@ jobs:
           --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux \
           --set service.annotations[0]="service.beta.kubernetes.io/azure-dns-label-name: poltweetex"
 
+    # Install cert-manager
     - run: |
       kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
 
-    # Install cert-manager
     - run: |
       helm upgrade --install cert-manager jetstack/cert-manager \
         --namespace ingress-basic \
