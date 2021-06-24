@@ -1,6 +1,7 @@
-import os
 import tweepy
 import string
+import os
+
 
 from . import models
 from .database import SessionLocal
@@ -11,6 +12,7 @@ from .database import SessionLocal
 auth = tweepy.OAuthHandler(os.environ['API_Key'], os.environ['API_Secret_Key'])
 auth.set_access_token(os.environ['Access_Token'],
                       os.environ['Access_Token_Secret'])
+
 twitterAPI = tweepy.API(auth)
 
 
@@ -38,7 +40,8 @@ def main():
                         word=key,
                         politician_id=politician.twitter_id,
                         tweet_id=info.id,
-                        count=dict[key]
+                        count=dict[key],
+                        date=info.created_at
                     )
                     db.add(new_word)
         db.commit()
