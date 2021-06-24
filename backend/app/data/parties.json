@@ -17,12 +17,12 @@
     {
         "Party":"Konfederacja",
         "party_ID":4,
-        "Politicians":[{"Name":"krzysztofbosak","ID":"80676829"},{"Name":"GrzegorzBraun_","ID":"1186367483546165200"},{"Name":"D_Sosnierz","ID":"956144051308425200"}]
+        "Politicians":[{"Name":"krzysztofbosak","ID":"80676829"}]
     },
     {
         "Party":"PSL",
         "party_ID":5,
-        "Politicians":[{"Name":"KosiniakKamysz","ID":"955239446"},{"Name":"KurzawaDariusz","ID":"1285852295897452500"},{"Name":"UNowogorska","ID":"1234487339772149800"}]
+        "Politicians":[{"Name":"KosiniakKamysz","ID":"955239446"}]
     },
     {
         "Party": "Kukiz2015",

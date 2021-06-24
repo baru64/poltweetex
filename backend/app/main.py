@@ -14,20 +14,20 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    with open("./app/data/parties.json",'r') as politicians_json:
+    with open("./app/data/parties.json", 'r') as politicians_json:
         parties = json.load(politicians_json)
     with SessionLocal() as db:
         crud.delete_all_parties(db)
         crud.delete_all_politicians(db)
         for party in parties:
             new_party = models.Party(
-                id = party["party_ID"],
-                name = party['Party']
+                id=party["party_ID"],
+                name=party['Party']
             )
             for politician in party["Politicians"]:
                 new_politician = models.Politician(
                     twitter_id=politician['ID'],
-                    name = politician['Name'],
+                    name=politician['Name'],
                     party_id=party["party_ID"]
                 )
                 db.add(new_politician)
@@ -35,6 +35,8 @@ async def startup_event():
         db.commit()
 
 # dependency
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -58,4 +60,3 @@ def read_parties(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 def read_politicians(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     politicians = crud.get_politicians(db, skip=skip, limit=limit)
     return politicians
-
