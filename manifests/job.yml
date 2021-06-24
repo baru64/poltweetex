@@ -15,3 +15,7 @@ spec:
             secretKeyRef:
               key: postgresql-password
               name: postgres-password
+        - name: POSTGRESQL_URL
+          value: postgres-postgresql
+        - name: POSTGRESQL_NAME
+          value: exampledb
