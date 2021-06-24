@@ -81,9 +81,12 @@ jobs:
         helm repo add jetstack https://charts.jetstack.io
         helm repo update
     
-    # Create ingress controller
+    # Create ingress controller namespace
     - run: |
         kubectl create namespace ingress-basic --dry-run -o json | kubectl apply -f -
+    
+    # Create ingress controller
+    - run: |
         helm upgrade --install nginx-ingress ingress-nginx/ingress-nginx \
           --namespace ingress-basic \
           --set controller.replicaCount=2 \
@@ -92,9 +95,11 @@ jobs:
           --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux \
           --set service.annotations[0]="service.beta.kubernetes.io/azure-dns-label-name: poltweetex"
     
-    # Install cert-manager
     - run: |
       kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
+
+    # Install cert-manager
+    - run: |
       helm upgrade --install cert-manager jetstack/cert-manager \
         --namespace ingress-basic \
         --set installCRDs=true \
