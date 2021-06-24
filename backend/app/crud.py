@@ -21,7 +21,7 @@ def delete_all_parties(db: Session):
     try:
         db.query(models.Party).delete()
         db.commit()
-    except:
+    except Exception:
         db.rollback()
 
 
@@ -43,7 +43,7 @@ def delete_all_politicians(db: Session):
     try:
         db.query(models.Politician).delete()
         db.commit()
-    except:
+    except Exception:
         db.rollback()
 
 # Word crud

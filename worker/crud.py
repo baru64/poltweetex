@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+import logging
 
 from . import models, schemas
 
@@ -21,12 +22,12 @@ def delete_all_parties(db: Session):
     try:
         db.query(models.Party).delete()
         db.commit()
-    except:
+    except Exception:
+        logging.error("Could not delete all parties, rollback")
         db.rollback()
 
 
 # Polticians crud
-
 def get_politicians(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Politician).offset(skip).limit(limit).all()
 
@@ -43,7 +44,7 @@ def delete_all_politicians(db: Session):
     try:
         db.query(models.Politician).delete()
         db.commit()
-    except:
+    except Exception:
         db.rollback()
 
 # Word crud
