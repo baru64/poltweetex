@@ -37,7 +37,17 @@ const staticWebsite = new storage.StorageAccountStaticWebsite("staticWebsite", {
     }),
 );
 
-["script.js"].map(name =>
+["style.css"].map(name =>
+    new storage.Blob(name, {
+        resourceGroupName: resourceGroup.name,
+        accountName: storageAccount.name,
+        containerName: staticWebsite.containerName,
+        source: new pulumi.asset.FileAsset(`./frontend/${name}`),
+        contentType: "text/css",
+    }),
+);
+
+["app.js"].map(name =>
     new storage.Blob(name, {
         resourceGroupName: resourceGroup.name,
         accountName: storageAccount.name,
