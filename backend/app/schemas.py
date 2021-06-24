@@ -24,6 +24,7 @@ class PoliticianBase(BaseModel):
     name: str
     twitter_id: str
     party_id: int
+    last_update: str
 
 
 class PoliticianCreate(PoliticianBase):

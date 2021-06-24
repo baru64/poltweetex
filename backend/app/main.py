@@ -1,5 +1,6 @@
 from typing import List
 import json
+from datetime import datetime, date
 
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session, query
@@ -7,6 +8,7 @@ from sqlalchemy.orm import Session, query
 from . import crud, models, schemas
 from .database import SessionLocal, engine
 
+models.Base.metadata.drop_all(bind=engine)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -28,7 +30,8 @@ async def startup_event():
                 new_politician = models.Politician(
                     twitter_id=politician['ID'],
                     name=politician['Name'],
-                    party_id=party["party_ID"]
+                    party_id=party["party_ID"],
+                    last_update=date.min
                 )
                 db.add(new_politician)
             db.add(new_party)
@@ -51,12 +54,16 @@ def read_root():
 
 
 @app.get("/parties", response_model=List[schemas.Party])
-def read_parties(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_parties(skip: int = 0,
+                 limit: int = 100,
+                 db: Session = Depends(get_db)):
     parties = crud.get_parties(db, skip=skip, limit=limit)
     return parties
 
 
 @app.get("/politicians", response_model=List[schemas.Politician])
-def read_politicians(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_politicians(skip: int = 0,
+                     limit: int = 100,
+                     db: Session = Depends(get_db)):
     politicians = crud.get_politicians(db, skip=skip, limit=limit)
     return politicians

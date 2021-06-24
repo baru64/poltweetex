@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 
 from .database import Base
 
@@ -16,6 +16,7 @@ class Politician(Base):
     twitter_id = Column(String, primary_key=True, index=True)
     name = Column(String, index=True)
     party_id = Column(Integer, index=True)
+    last_update = Column(DateTime, index=True)
 
 
 class Word(Base):

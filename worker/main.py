@@ -23,14 +23,19 @@ def main():
     with SessionLocal() as db:
         politicians = db.query(models.Politician).all()
         for politician in politicians:
-            print("Reading tweets of"+politician.twitter_id)
+            print("Reading tweets of "+politician.name)
             twitts = twitterAPI.user_timeline(user_id=politician.twitter_id,
                                               count=10,
                                               include_rts=False,
                                               tweet_mode='extended'
                                               )
-            print("Analizing tweets of "+politician.twitter_id)
-            for info in twitts:
+            print("Analizing tweets of "+politician.name)
+            for info in reversed(twitts):
+                if(info.created_at > politician.last_update):
+                    politician.last_update = info.created_at
+                    db.add(politician)
+                else:
+                    continue
                 info.full_text = simplifyTweetText(info.full_text)
                 dict = mapReducer(info.full_text)
                 for key in dict:
