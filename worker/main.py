@@ -1,4 +1,4 @@
-# import os
+import os
 import configparser
 import tweepy
 import string
@@ -13,9 +13,9 @@ config.read('worker/config.ini')
 
 
 auth = tweepy.OAuthHandler(
-    config['twitter']['API_Key'], config['twitter']['API_Secret_Key'])
-auth.set_access_token(config['twitter']['Access_Token'],
-                      config['twitter']['Access_Token_Secret'])
+    os.environ('API_Key'), os.environ('API_Secret_Key'))
+auth.set_access_token(os.environ('Access_Token'),
+                      os.environ('Access_Token_Secret'))
 twitterAPI = tweepy.API(auth)
 
 

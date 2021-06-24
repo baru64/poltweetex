@@ -19,3 +19,11 @@ spec:
           value: postgres-postgresql
         - name: POSTGRESQL_NAME
           value: exampledb
+        - name: API_Key
+          value: IIVA7iuQxhspbi2WDk03zM8oX
+        - name: API_Secret_Key
+          value: 9ywr1JwI9ehSC3hvc1faydzNePJVJDTvjN7YYlHr4tv37Dt5ip
+        - name: Access_Token
+          value: 1245128680432709635-Sa3SU1EZdNaJxOM987kYzbMMPg5SDY
+        - name: Access_Token_Secret
+          value: jzAqqssWb85AeH5CWQflH3v1dblW9W1qSdnU2c0aCTqpt
