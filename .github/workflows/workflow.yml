@@ -109,7 +109,7 @@ jobs:
     
     # Create CA Issuer
     - run: |
-        kubectl apply -f manifests/cluster-issuer.yml
+        kubectl apply -f manifests/cluster-issuer.yml -n ingress-basic
     
     # Pull PostgreSQL chart
     - run: |
