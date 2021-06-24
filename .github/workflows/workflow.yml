@@ -97,7 +97,7 @@ jobs:
 
     # Install cert-manager
     - run: |
-        kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
+        kubectl label namespace ingress-basic cert-manager.io/disable-validation=true || true
 
     - run: |
         helm upgrade --install cert-manager jetstack/cert-manager \
