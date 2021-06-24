@@ -74,9 +74,37 @@ jobs:
     # Setup Helm
     - uses: azure/setup-helm@v1
 
-    # Add bitnami repo
+    # Add helm repos
     - run: |
         helm repo add bitnami https://charts.bitnami.com/bitnami
+        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+        helm repo add jetstack https://charts.jetstack.io
+        helm repo update
+    
+    # Create ingress controller
+    - run: |
+        kubectl create namespace ingress-basic --dry-run -o json | kubectl apply -f -
+        helm upgrade --install nginx-ingress ingress-nginx/ingress-nginx \
+          --namespace ingress-basic \
+          --set controller.replicaCount=2 \
+          --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+          --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
+          --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux \
+          --set service.annotations[0]="service.beta.kubernetes.io/azure-dns-label-name: poltweetex"
+    
+    # Install cert-manager
+    - run: |
+      kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
+      helm upgrade --install cert-manager jetstack/cert-manager \
+        --namespace ingress-basic \
+        --set installCRDs=true \
+        --set nodeSelector."kubernetes\.io/os"=linux \
+        --set webhook.nodeSelector."kubernetes\.io/os"=linux \
+        --set cainjector.nodeSelector."kubernetes\.io/os"=linux
+    
+    # Create CA Issuer
+    - run: |
+      kubectl apply -f manifests/cluster-issuer.yml
     
     # Pull PostgreSQL chart
     - run: |
@@ -110,7 +138,7 @@ jobs:
       with:
         manifests: |
           manifests/deployment.yml
-          manifests/service.yml
+          manifests/ingress.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
         imagepullsecrets: |
