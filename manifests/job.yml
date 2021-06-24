@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: 'update-job'
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: 'worker'
+        image: poltweetexregistry.azurecr.io/myworker
+        env:
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgresql-password
+              name: postgres-password

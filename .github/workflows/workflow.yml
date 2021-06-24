@@ -124,13 +124,13 @@ jobs:
     
     # Delete job if exists
     - run: |
-        kubectl delete job indexed-job || true
+        kubectl delete job update-job || true
 
     # Deploy job to AKS
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          manifests/indexed-job.yml
+          manifests/job.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
         imagepullsecrets: |
@@ -139,13 +139,13 @@ jobs:
     
     # Delete cronjob if exists
     - run: |
-        kubectl delete job indexed-cronjob || true
+        kubectl delete cronjob update-cronjob || true
 
     # Deploy cronjob to AKS
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          manifests/indexed-cronjob.yml
+          manifests/cronjob.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
         imagepullsecrets: |
