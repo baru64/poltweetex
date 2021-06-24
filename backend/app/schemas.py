@@ -2,23 +2,6 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-# Items schema 
-class ItemBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-
-
-class ItemCreate(ItemBase):
-    pass
-
-
-class Item(ItemBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 # Party schema
 class PartyBase(BaseModel):
     name: str
@@ -42,8 +25,6 @@ class PoliticianCreate(PoliticianBase):
     pass
 
 class Politician(PoliticianBase):
-    id: str
-
     class Config:
         orm_mode = True
 

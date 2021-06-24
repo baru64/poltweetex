@@ -1,0 +1,32 @@
+[
+    {
+        "Party":"PO",
+        "party_ID":1,
+        "Politicians":[{"Name":"bbudka","ID":"118739645"},{"Name":"tadeuszarkit","ID":"364925029"},{"Name":"AndrzejBiernat","ID":"362466409"}]
+    },
+    {
+        "Party":"PIS",
+        "party_ID":2,
+        "Politicians":[{"Name":"AndrzejDuda","ID":"202086424"},{"Name":"ZiobroPL","ID":"1614572052"},{"Name":"BeataSzydlo","ID":"76979225"},{"Name":"SasinJacek","ID":"2827443467"}]
+    },
+    {
+        "Party":"Lewica",
+        "party_ID":3,
+        "Politicians":[{"Name":"RobertBiedron","ID":"466781777"},{"Name":"ZandbergRAZEM","ID":"4008009335"},{"Name":"MagdaBiejat","ID":"76041641"}]
+    },
+    {
+        "Party":"Konfederacja",
+        "party_ID":4,
+        "Politicians":[{"Name":"krzysztofbosak","ID":"80676829"},{"Name":"GrzegorzBraun_","ID":"1186367483546165200"},{"Name":"D_Sosnierz","ID":"956144051308425200"}]
+    },
+    {
+        "Party":"PSL",
+        "party_ID":5,
+        "Politicians":[{"Name":"KosiniakKamysz","ID":"955239446"},{"Name":"KurzawaDariusz","ID":"1285852295897452500"},{"Name":"UNowogorska","ID":"1234487339772149800"}]
+    },
+    {
+        "Party": "Kukiz2015",
+        "party_ID":6,
+        "Politicians":[{"Name":"pkukiz","ID":"1262921364"},{"Name":"jsachajko","ID":"3251198688"},{"Name":"styszka","ID":"31377422"}]
+    }
+]

@@ -7,10 +7,12 @@
 
 ## Model Bazy
 - party
+  - id <--- primary key 
   - name
   - logo
 - politician
-  - twitter id
+  - twitter id <-- primary key
+  - name 
   - last update
   - party id
 - word
