@@ -6,13 +6,14 @@ spec:
   schedule: "0 2 * * *"
   jobTemplate:
     spec:
-      restartPolicy: Never
-      containers:
-      - name: 'worker'
-        image: poltweetexregistry.azurecr.io/myworker
-        env:
-        - name: POSTGRESQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: postgresql-password
-              name: postgres-password
+      template:
+        spec:
+          containers:
+          - name: 'worker'
+            image: poltweetexregistry.azurecr.io/myworker
+            env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: postgres-password
