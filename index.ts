@@ -61,7 +61,7 @@ const blobServiceProperties = new storage.BlobServiceProperties("blobServiceProp
                     "PUT",
                 ],
                 allowedOrigins: [
-                    "http://poltweetex.northeurope.cloudapp.azure.com"
+                    "https://poltweetex.northeurope.cloudapp.azure.com"
                 ],
                 exposedHeaders: ["*"],
                 maxAgeInSeconds: 5
