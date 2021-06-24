@@ -39,7 +39,7 @@ class Politician(PoliticianBase):
 
 class WordBase(BaseModel):
     word: str
-    politician_id: str
+    politician_id: int
     tweet_id: str
     count: int
 

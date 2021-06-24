@@ -11,27 +11,32 @@ randomTweets = ['sfajczyłam płytkę PCB, której w pełni działający egzempl
                 'Podsumowanie ostatnich 6 lat w Polsce:',
                 'Dlaczego prezes jeździ CZESKIM samochodem?!']
 
+
 def splitIntoWords(lst):
     return lst.split(' ')
 
 
-def searchForWordInSentence(searchWord, sentence, matchingRatio = 50):
+def searchForWordInSentence(searchWord, sentence, matchingRatio=50):
     words = splitIntoWords(sentence)
     for word in words:
-        ratio = fuzz.ratio(searchWord,word)
-        if(ratio >matchingRatio):
+        ratio = fuzz.ratio(searchWord, word)
+        if(ratio > matchingRatio):
             print("[Word:"+word+", Ratio:" + str(ratio)+"]")
 
+
 def replacePolishSigns(sentence):
-    polishSigns={'ą':'a','ć':'c','ę':'e','ł':'l','ń':'n','ó':'o','ś':'s','ż':'z','ź':'z'}
+    polishSigns = {'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l',
+                   'ń': 'n', 'ó': 'o', 'ś': 's', 'ż': 'z', 'ź': 'z'}
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     for sign in polishSigns:
-        sentence = sentence.replace(sign,polishSigns[sign])
+        sentence = sentence.replace(sign, polishSigns[sign])
     return sentence
+
 
 def removePutationMarks(sentence):
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     return sentence
+
 
 def modifyTweets(tweet):
     tweet = tweet.lower()
@@ -39,11 +44,9 @@ def modifyTweets(tweet):
     tweet = removePutationMarks(tweet)
     return tweet
 
-# Code for clearing data 
+
+# Code for clearing data
 searchWord = 'samolot'
 for tweet in randomTweets:
     tweet = modifyTweets(tweet)
-    searchForWordInSentence(searchWord,tweet)
-    
-
-
+    searchForWordInSentence(searchWord, tweet)

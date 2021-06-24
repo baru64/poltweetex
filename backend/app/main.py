@@ -35,6 +35,8 @@ app = FastAPI()
 #         db.commit()
 
 # dependency
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -58,4 +60,3 @@ def read_parties(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 def read_politicians(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     politicians = crud.get_politicians(db, skip=skip, limit=limit)
     return politicians
-

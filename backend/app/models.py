@@ -6,25 +6,26 @@ from .database import Base
 class Party(Base):
     __tablename__ = "parties"
 
-    id = Column(Integer, primary_key=True, index= True)
-    name = Column(String, index= True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
 
 class Politician(Base):
     __tablename__ = "politicians"
 
-    twitter_id = Column(String,primary_key=True, index=True)
-    name = Column(String,index=True)
-    party_id = Column(Integer,index=True)
+    twitter_id = Column(String, primary_key=True, index=True)
+    name = Column(String, index=True)
+    party_id = Column(Integer, index=True)
 
 
 class Word(Base):
-    __tablename__="words"
+    __tablename__ = "words"
 
     id = Column(Integer, primary_key=True, index=True)
     word = Column(String, index=True)
-    politician_id = Column(Integer, index=True)
+    politician_id = Column(String, index=True)
     tweet_id = Column(String, index=True)
-    count = Column(Integer,index=True)
+    count = Column(Integer, index=True)
 
 
 class WordIndex(Base):
@@ -32,4 +33,3 @@ class WordIndex(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     word = Column(String, index=True)
-
