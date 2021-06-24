@@ -97,19 +97,19 @@ jobs:
 
     # Install cert-manager
     - run: |
-      kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
+        kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
 
     - run: |
-      helm upgrade --install cert-manager jetstack/cert-manager \
-        --namespace ingress-basic \
-        --set installCRDs=true \
-        --set nodeSelector."kubernetes\.io/os"=linux \
-        --set webhook.nodeSelector."kubernetes\.io/os"=linux \
-        --set cainjector.nodeSelector."kubernetes\.io/os"=linux
+        helm upgrade --install cert-manager jetstack/cert-manager \
+          --namespace ingress-basic \
+          --set installCRDs=true \
+          --set nodeSelector."kubernetes\.io/os"=linux \
+          --set webhook.nodeSelector."kubernetes\.io/os"=linux \
+          --set cainjector.nodeSelector."kubernetes\.io/os"=linux
     
     # Create CA Issuer
     - run: |
-      kubectl apply -f manifests/cluster-issuer.yml
+        kubectl apply -f manifests/cluster-issuer.yml
     
     # Pull PostgreSQL chart
     - run: |
