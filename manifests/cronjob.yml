@@ -8,6 +8,7 @@ spec:
     spec:
       template:
         spec:
+          restartPolicy: Never
           containers:
           - name: 'worker'
             image: poltweetexregistry.azurecr.io/myworker
