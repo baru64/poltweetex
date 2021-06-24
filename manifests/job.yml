@@ -22,20 +22,20 @@ spec:
         - name: API_Key
           valueFrom:
             secretKeyRef:
-              key: twitter-secret
-              name: api-key
+              name: twitter-secret
+              key: api-key
         - name: API_Secret_Key
           valueFrom:
             secretKeyRef:
-              key: twitter-secret
-              name: api-secret-key
+              name: twitter-secret
+              key: api-secret-key
         - name: Access_Token
           valueFrom:
             secretKeyRef:
-              key: twitter-secret
-              name: access-token
+              name: twitter-secret
+              key: access-token
         - name: Access_Token_Secret
           valueFrom:
             secretKeyRef:
-              key: twitter-secret
-              name: access-token-secret
+              name: twitter-secret
+              key: access-token-secret
