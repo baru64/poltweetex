@@ -3,8 +3,9 @@ config.ini
 .vscode
 *.pyc
 .vim
-/Front/node_modules
+old/Front/node_modules
 /.vscode
 venv
 bin
 node_modules
+kube-conf.yml

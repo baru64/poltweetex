@@ -1,8 +1,16 @@
-name: Pulumi
+name: Deploy app
+
 on:
   push:
     branches:
       - main
+
+env:
+  REGISTRY_NAME: poltweetexregistry
+  CLUSTER_NAME: poltweetexkube6262b6af
+  CLUSTER_RESOURCE_GROUP: resourceGroup332493e1
+  NAMESPACE: default
+
 jobs:
   up:
     name: Deploy
@@ -24,3 +32,122 @@ jobs:
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+  build:
+    name: Build and deploy k8s resources
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Connect to Azure Container registry (ACR)
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    # Container build and push to a Azure Container registry (ACR)
+    - run: |
+        docker build ./backend/ -t ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+    
+    # Set the target Azure Kubernetes Service (AKS) cluster. 
+    - uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+    
+    # Create namespace if doesn't exist
+    - run: |
+        kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+    
+    # Create imagepullsecret for Azure Container registry (ACR)
+    - uses: azure/k8s-create-secret@v1
+      with:
+        container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
+        namespace: ${{ env.NAMESPACE }}
+    
+    # Setup Helm
+    - uses: azure/setup-helm@v1
+
+    # Add bitnami repo
+    - run: |
+        helm repo add bitnami https://charts.bitnami.com/bitnami
+    
+    # Pull PostgreSQL chart
+    - run: |
+        helm pull bitnami/postgresql --untar
+    
+    # Postgres secret
+    - uses: azure/k8s-create-secret@v1
+      with:
+        secret-type: generic
+        secret-name: postgres-password
+        arguments: --from-literal=postgresql-password=${{ secrets.POSTGRESQL_PASSWORD }}
+        namespace: ${{ env.NAMESPACE }}
+
+    # Bake helm chart
+    - run: |
+        helm template postgres ./postgresql/ -f postgres-values.yaml > manifests/postgres.yaml
+    
+    # Deploy PostgreSQL
+    - uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/postgres.yaml
+        namespace: ${{ env.NAMESPACE }}
+
+    # Create configmap if not exists
+    - run: |
+        kubectl create configmap app-config --from-file=configmap/ --dry-run=client -o json | kubectl apply -f -
+    
+    # Deploy app to AKS
+    - uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+        imagepullsecrets: |
+          ${{ env.REGISTRY_NAME }}-registry-connection
+        namespace: ${{ env.NAMESPACE }}
+
+    # Build worker
+    - run: |
+        docker build ./worker/ -t ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
+    
+    # Delete job if exists
+    - run: |
+        kubectl delete job indexed-job || true
+
+    # Deploy job to AKS
+    - uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/indexed-job.yml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
+        imagepullsecrets: |
+          ${{ env.REGISTRY_NAME }}-registry-connection
+        namespace: ${{ env.NAMESPACE }}
+    
+    # Delete cronjob if exists
+    - run: |
+        kubectl delete job indexed-cronjob || true
+
+    # Deploy cronjob to AKS
+    - uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/indexed-cronjob.yml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
+        imagepullsecrets: |
+          ${{ env.REGISTRY_NAME }}-registry-connection
+        namespace: ${{ env.NAMESPACE }}

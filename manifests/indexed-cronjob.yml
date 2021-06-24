@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: indexed-cronjob
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      completions: 5
+      parallelism: 3
+      completionMode: Indexed
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: 'worker'
+            image: poltweetexregistry.azurecr.io/myworker
+            env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: postgres-password

@@ -1,116 +1,159 @@
+import * as azuread from "@pulumi/azuread";
 import * as pulumi from "@pulumi/pulumi";
-import * as resources from "@pulumi/azure-native/resources";
-import * as storage from "@pulumi/azure-native/storage";
-import * as web from "@pulumi/azure-native/web";
-import * as sql from "@pulumi/azure-native/sql"
+import * as random from "@pulumi/random";
+import * as tls from "@pulumi/tls";
 
-// Create an Azure Resource Group
+import * as containerservice from "@pulumi/azure-native/containerservice";
+import * as resources from "@pulumi/azure-native/resources";
+import * as containerregistry from "@pulumi/azure-native/containerregistry";
+import * as storage from "@pulumi/azure-native/storage";
+
 const resourceGroup = new resources.ResourceGroup("resourceGroup");
 
-// Create an Azure resource (Storage Account)
-const storageAccount = new storage.StorageAccount("sa", {
-    resourceGroupName: resourceGroup.name,
+const storageAccount = new storage.StorageAccount("storageaccount", {
+    enableHttpsTrafficOnly: true,
     kind: storage.Kind.StorageV2,
+    resourceGroupName: resourceGroup.name,
     sku: {
         name: storage.SkuName.Standard_LRS,
     },
 });
 
-// Export the primary key of the Storage Account
-const storageAccountKeys = pulumi.all([resourceGroup.name, storageAccount.name]).apply(([resourceGroupName, accountName]) =>
-    storage.listStorageAccountKeys({ resourceGroupName, accountName }));
-export const primaryStorageKey = storageAccountKeys.keys[0].value;
-
-const dblogin = "dummylogin";
-const dbpwd = "asdfnewr134ss3!@11f4265sassdfcxvzew4sf-23"
-
-// Create database server and database
-const dbserver = new sql.Server("dbserver2", {
-    administratorLogin: dblogin,
-    administratorLoginPassword: dbpwd,
-    resourceGroupName: resourceGroup.name,
-    serverName: "twitterdbserver2",
-});
-
-
-const database = new sql.Database("tweetdb", {
-    databaseName: "tweetdb",
-    resourceGroupName: resourceGroup.name,
-    serverName: dbserver.name,
-    sku: {
-        name: "S0",
-    },
-});
-
-const linuxPlan = new web.AppServicePlan("linux-asp", {
-    resourceGroupName: resourceGroup.name,
-    kind: "Linux",
-    sku: {
-        name: "Y1",
-        tier: "Dynamic",
-    },
-    reserved: true,
-});
-
-const container = new storage.BlobContainer("container", {
+const staticWebsite = new storage.StorageAccountStaticWebsite("staticWebsite", {
     accountName: storageAccount.name,
     resourceGroupName: resourceGroup.name,
-    publicAccess: storage.PublicAccess.None,
+    indexDocument: "index.html",
+    error404Document: "404.html",
 });
 
-const pythonBlob = new storage.Blob("pythonBlob", {
-    resourceGroupName: resourceGroup.name,
+// Upload the files
+["index.html", "404.html"].map(name =>
+    new storage.Blob(name, {
+        resourceGroupName: resourceGroup.name,
+        accountName: storageAccount.name,
+        containerName: staticWebsite.containerName,
+        source: new pulumi.asset.FileAsset(`./frontend/${name}`),
+        contentType: "text/html",
+    }),
+);
+
+["script.js"].map(name =>
+    new storage.Blob(name, {
+        resourceGroupName: resourceGroup.name,
+        accountName: storageAccount.name,
+        containerName: staticWebsite.containerName,
+        source: new pulumi.asset.FileAsset(`./frontend/${name}`),
+        contentType: "text/javascript",
+    }),
+);
+
+const blobServiceProperties = new storage.BlobServiceProperties("blobServiceProperties", {
     accountName: storageAccount.name,
-    containerName: container.name,
-    source: new pulumi.asset.FileArchive("./python"),
-});
-
-const pythonBlobSignedURL = signedBlobReadUrl(pythonBlob, container, storageAccount, resourceGroup);
-
-const pythonApp = new web.WebApp("httppython", {
+    blobServicesName: "default",
     resourceGroupName: resourceGroup.name,
-    serverFarmId: linuxPlan.id,
-    kind: "FunctionApp",
-    siteConfig: {
-        appSettings: [
-            { name: "runtime", value: "python" },
-            { name: "FUNCTIONS_WORKER_RUNTIME", value: "python" },
-            { name: "WEBSITE_RUN_FROM_PACKAGE", value: pythonBlobSignedURL },
-            { name: "FUNCTIONS_EXTENSION_VERSION", value: "~3" },
-            { name: "DATABASE_CONNECTION",
-              value: pulumi.all([dbserver.name, database.name]).apply(([server, db]) =>                   
-                `Server=tcp:${server}.database.windows.net;initial catalog=${db};user ID=${dblogin};password=${dbpwd};Min Pool Size=0;Max Pool Size=30;Persist Security Info=true;`) },
-            { name: "DATABASE_LOGIN", value: dblogin },
-            { name: "DATABASE_PASSWD", value: dbpwd },
-            { name: "DATABASE_SERVER", value: `${dbserver.name}.database.windows.net` },
-            { name: "DATABASE_NAME", value: database.name }
+    cors: {
+        corsRules: [
+            {
+                allowedHeaders: ["*"],
+                allowedMethods: [
+                    "GET",
+                    "POST",
+                    "PUT",
+                ],
+                allowedOrigins: [
+                    "http://poltweetex.northeurope.cloudapp.azure.com"
+                ],
+                exposedHeaders: ["*"],
+                maxAgeInSeconds: 5
+            }
         ]
+    }
+});
+
+const adApp = new azuread.Application("poltweetex", {
+    displayName: "poltweetex",
+});
+
+const adSp = new azuread.ServicePrincipal("poltweetexSp", {
+    applicationId: adApp.applicationId,
+});
+
+const password = new random.RandomPassword("password", {
+    length: 20,
+    special: true,
+});
+
+const adSpPassword = new azuread.ServicePrincipalPassword("poltweetexSpPassword", {
+    servicePrincipalId: adSp.id,
+    value: password.result,
+    endDate: "2099-01-01T00:00:00Z",
+});
+
+const sshKey = new tls.PrivateKey("ssh-key", {
+    algorithm: "RSA",
+    rsaBits: 4096,
+});
+
+const config = new pulumi.Config();
+const managedClusterName = config.get("managedClusterName") || "poltweetexkube";
+const cluster = new containerservice.ManagedCluster(managedClusterName, {
+    resourceGroupName: resourceGroup.name,
+    agentPoolProfiles: [{
+        count: 2,
+        maxPods: 110,
+        mode: "System",
+        name: "agentpool",
+        nodeLabels: {},
+        osDiskSizeGB: 30,
+        osType: "Linux",
+        type: "VirtualMachineScaleSets",
+        vmSize: "Standard_DS2_v2",
+    }],
+    dnsPrefix: resourceGroup.name,
+    enableRBAC: true,
+    kubernetesVersion: "1.21.1",
+    linuxProfile: {
+        adminUsername: "testuser",
+        ssh: {
+            publicKeys: [{
+                keyData: sshKey.publicKeyOpenssh,
+            }],
+        },
+    },
+    nodeResourceGroup: `MC_azure-go_${managedClusterName}`,
+    servicePrincipalProfile: {
+        clientId: adApp.applicationId,
+        secret: adSpPassword.value,
     },
 });
 
-function signedBlobReadUrl(
-    blob: storage.Blob,
-    container: storage.BlobContainer,
-    account: storage.StorageAccount,
-    resourceGroup: resources.ResourceGroup
-): pulumi.Output<string> {
-    const blobSAS = pulumi.all<string>([blob.name, container.name, account.name, resourceGroup.name]).apply(args =>
-        storage.listStorageAccountServiceSAS({
-            accountName: args[2],
-            protocols: storage.HttpProtocol.Https,
-            sharedAccessExpiryTime: "2030-01-01",
-            sharedAccessStartTime: "2021-01-01",
-            resourceGroupName: args[3],
-            resource: storage.SignedResource.C,
-            permissions: storage.Permissions.R,
-            canonicalizedResource: "/blob/" + args[2] + "/" + args[1],
-            contentType: "application/json",
-            cacheControl: "max-age=5",
-            contentDisposition: "inline",
-            contentEncoding: "deflate",
-        }));
+const registry = new containerregistry.Registry("registry", {
+    adminUserEnabled: true,
+    registryName: "poltweetexregistry",
+    resourceGroupName: resourceGroup.name,
+    sku: {
+        name: "Standard"
+    },
+});
 
-    return pulumi.interpolate`https://${account.name}.blob.core.windows.net/${container.name}/${blob.name}?${blobSAS.serviceSasToken}`;
-}
+const registryCreds = pulumi.all([registry.name, resourceGroup.name]).apply(([registryName, rgName]) => {
+    return containerregistry.listRegistryCredentials({
+        registryName: registryName,
+        resourceGroupName: rgName,
+    });
+});
 
-export const pythonEndpoint = pythonApp.defaultHostName.apply(ep => `https://${ep}/api/apifunction?name=Pulumi`);
+const creds = pulumi.all([cluster.name, resourceGroup.name]).apply(([clusterName, rgName]) => {
+    return containerservice.listManagedClusterUserCredentials({
+        resourceGroupName: rgName,
+        resourceName: clusterName,
+    });
+});
+
+const encoded = creds.kubeconfigs[0].value;
+export const kubeconfig = encoded.apply(enc => Buffer.from(enc, "base64").toString());
+export const registryusername = registryCreds.apply(registryCreds => registryCreds.username!);
+export const registrypassword = registryCreds.apply(registryCreds => registryCreds.passwords![0].value!);
+
+// Web endpoint to the website
+export const staticEndpoint = storageAccount.primaryEndpoints.web;
