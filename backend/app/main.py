@@ -66,3 +66,11 @@ def read_politicians(skip: int = 0,
                      db: Session = Depends(get_db)):
     politicians = crud.get_politicians(db, skip=skip, limit=limit)
     return politicians
+
+
+@app.get("/words", response_model=List[schemas.Word])
+def read_words(skip: int = 0,
+               limit: int = 100,
+               db: Session = Depends(get_db)):
+    words = crud.get_words(db, skip=skip, limit=limit)
+    return words
