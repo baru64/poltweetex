@@ -123,6 +123,18 @@ jobs:
         arguments: --from-literal=postgresql-password=${{ secrets.POSTGRESQL_PASSWORD }}
         namespace: ${{ env.NAMESPACE }}
 
+    # Postgres secret
+    - uses: azure/k8s-create-secret@v1
+      with:
+        secret-type: generic
+        secret-name: twitter-secret
+        arguments: >
+          --from-literal=api-key=${{ secrets.TT_API_KEY }}
+          --from-literal=api-secret-key=${{ secrets.TT_API_SECRET_KEY }}
+          --from-literal=access-token=${{ secrets.TT_ACCESS_TOKEN }}
+          --from-literal=access-token-secret=${{ secrets.TT_ACCESS_TOKEN_SECRET }}
+        namespace: ${{ env.NAMESPACE }}
+
     # Bake helm chart
     - run: |
         helm template postgres ./postgresql/ -f postgres-values.yaml > manifests/postgres.yaml

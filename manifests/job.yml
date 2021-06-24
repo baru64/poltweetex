@@ -20,10 +20,22 @@ spec:
         - name: POSTGRESQL_NAME
           value: exampledb
         - name: API_Key
-          value: IIVA7iuQxhspbi2WDk03zM8oX
+          valueFrom:
+            secretKeyRef:
+              key: twitter-secret
+              name: api-key
         - name: API_Secret_Key
-          value: 9ywr1JwI9ehSC3hvc1faydzNePJVJDTvjN7YYlHr4tv37Dt5ip
+          valueFrom:
+            secretKeyRef:
+              key: twitter-secret
+              name: api-secret-key
         - name: Access_Token
-          value: 1245128680432709635-Sa3SU1EZdNaJxOM987kYzbMMPg5SDY
+          valueFrom:
+            secretKeyRef:
+              key: twitter-secret
+              name: access-token
         - name: Access_Token_Secret
-          value: jzAqqssWb85AeH5CWQflH3v1dblW9W1qSdnU2c0aCTqpt
+          valueFrom:
+            secretKeyRef:
+              key: twitter-secret
+              name: access-token-secret
