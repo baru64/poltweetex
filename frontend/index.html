@@ -1,63 +1,13 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=2.0">
-        <script src="https://unpkg.com/vue@3.0.2"></script>
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-        <title>Tweeter of Politics</title>
-        <script src="app.js" defer></script>
-    </head>
-    <body>
-        <div id="app">
-        <div class="column is-8 is-offset-1" id="Search">
-            <h2 class='title is-1 is-offset-5' style="color:white">{{title}}</h2>
-            <div id = "Input field" class = "columns">
-                <input class = "column input" v-model="word" placeholder="Search for word">
-                <button class = "button is-2" @click="sumitSearch(word)">Submit</button>
-            </div> 
-            <div class = "buttons">
-                <button class="button is-info is-light" @click="getSejm('Sejm')">Sejm</button>
-                <button class="button is-info is-light" @click="getParty()">Partie</button>
-                <button class="button is-info is-light" @click="getPoselsFromSejm()">Posełowie</button>
-            </div> 
-            <div class = "buttons" v-if = "showParties">
-                <button class="button is-warning is-light" v-for="party in parties" @click="getPoselsFromParty(party.name)">{{party.name}}</button>
-            </div>
-            <div class = "buttons" v-if = showPoliticsFromParty>
-                <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords()">{{politic.name}} {{politic.surname}} z {{party}}</button>
-            </div>
-            <div class = "buttons" v-if = showPoliticsFromSejm>
-                <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords()">{{politic.name}} {{politic.surname}} z {{party}}</button>
-            </div>
-        </div>
-
-        <table class="table column is-9 is-offset-1 myTable"> <!-- Table will show data that we want to output -->
-            <thead>
-              <tr>
-                <th><abbr title="Numers">Nr</abbr></th>
-                <th>Polityk</th>
-                <th><abbr title="Party">Partia</abbr></th>
-                <th><abbr title="Word">Słowo</abbr></th>
-                <th><abbr title="Last_TT">Last Tweet</abbr></th>
-                <th><abbr title="TweetCount">Nr of Tweets</abbr></th>
-              </tr>
-            </thead>
-            <tbody>
-                <div id ="Table">
-                    <tr v-for = "(tweet,index) in tweets">
-                        <th>{{index+1}}</th>
-                        <td><p>{{tweet.name}} {{tweet.surname}}</p></td>
-                        <td>{{tweet.party}}</td>
-                        <td>{{tweet.word}}</td>
-                        <td>{{tweet.lastTT}}</td>
-                        <td>{{tweet.count}}</td>
-                    </tr>
-                </div>
-            </tbody>
-          </table>
-        </div>
-    </body>
-
+<head>
+    <meta charset="utf-8"/>
+    <title>Example frontend</title>
+</head>
+<body>
+    <h1>HELLO</h1>
+    <p>backend response: </p>
+    <div id="testbox"></div>
+    <script src="script.js"></script>
+</body>
 </html>
