@@ -1,4 +1,4 @@
-const url = "http://poltweetex.northeurope.cloudapp.azure.com";
+const url = "https://poltweetex.northeurope.cloudapp.azure.com";
 async function checkBackend() {
     let response = await fetch(url);
     let testbox = document.getElementById('testbox');
