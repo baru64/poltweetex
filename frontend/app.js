@@ -37,17 +37,14 @@ const app = Vue.createApp({
             this.showParties = !this.showParties;
         },
         async getPoselsFromParty(party) {
-            const party_id = party.id
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties', {party_id})
-            console.log(party_id);
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians', { params: { 'party': party.id } })
+            this.politics = response.data
             this.showPoliticsFromSejm = false;
             this.party = party
             this.showPoliticsFromParty = true;
         },
         async getPoselsFromSejm() {
-            const party_id = 0
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians', {party_id})
-            console.log(response);
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians', { params: { 'party': 0 } })
             this.politics = response.data
             this.party = 'Sejmu';
             this.showParties = false;
@@ -55,9 +52,9 @@ const app = Vue.createApp({
             this.showPoliticsFromSejm = true;
 
         },
-        getPoliticainWords() {
-            fetch("http://127.0.0.1:8000/rndtweets")
-                .then(response => response.json)
+        async getPoliticainWords(politic) {
+            console.log(politic)
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians', { params: { 'politician': politic.twitter_id } })
         }
     }
 });
