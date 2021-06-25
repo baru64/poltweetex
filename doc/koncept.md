@@ -78,3 +78,5 @@ Raz w tygodniu odpalać funkcję która sumuje tweety z ostatniego tygodnia, mie
 - Add more politicains 
 - Add poltics commentators xD
 - Możliwość dodania na froncie/wywolania funkcji ktora doda to do bazy nowego polityka po jego nicku z tt 
+
+https://docs.google.com/spreadsheets/d/1vLtqd11J_ufGP2WarwFaq-IoWY_vZqYBoTFLE01fGKU/edit#gid=0

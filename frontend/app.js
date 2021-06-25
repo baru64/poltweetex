@@ -2,7 +2,7 @@ const app = Vue.createApp({
     data() {
         return {
             word: '',
-            title: 'Twittexpol',
+            title: 'Poltwittex',
             showParties: false,
             showPoliticsFromParty: false,
             showPoliticsFromSejm: false,

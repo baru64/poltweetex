@@ -1,22 +1,11 @@
 # Twittexpol
-Api to scrap data from twitter
+It is simple site made in Azure using Pulumi. You can see frequency of words tweeted by any politician in Poland.
 
-# Backend
-Python -> Fastapi, sqlalchemy 
-#Front 
-React (mby angular)
-# Cloud 
-AWS
+https://storageaccount50500af3.z16.web.core.windows.net/?fbclid=IwAR3WHbE8ruTDzxxYFYXE21WNcWqdvlwdz3IOAvZ1cBvHZfWH7rgsgPkN_5g
 
-
-# Twitter accounts 
-https://docs.google.com/spreadsheets/d/1vLtqd11J_ufGP2WarwFaq-IoWY_vZqYBoTFLE01fGKU/edit#gid=0
-
-
-# How to run API
-
-``` Bash
-> pipenv install 
-> pipenv shell 
-> hypercorn main:app --reload
-```
+### Infrastructure
+TS + Pulumi
+### Backend 
+Python 
+### Front 
+Vue.js
