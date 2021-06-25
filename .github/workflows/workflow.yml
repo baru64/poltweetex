@@ -167,20 +167,20 @@ jobs:
         docker build ./worker/ -t ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
     
-    # Delete job if exists
-    - run: |
-        kubectl delete job update-job || true
-
-    # Deploy job to AKS
-    - uses: azure/k8s-deploy@v1
-      with:
-        manifests: |
-          manifests/job.yml
-        images: |
-          ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
-        imagepullsecrets: |
-          ${{ env.REGISTRY_NAME }}-registry-connection
-        namespace: ${{ env.NAMESPACE }}
+#    # Delete job if exists
+#    - run: |
+#        kubectl delete job update-job || true
+#
+#    # Deploy job to AKS
+#    - uses: azure/k8s-deploy@v1
+#      with:
+#        manifests: |
+#          manifests/job.yml
+#        images: |
+#          ${{ env.REGISTRY_NAME }}.azurecr.io/myworker:${{ github.sha }}
+#        imagepullsecrets: |
+#          ${{ env.REGISTRY_NAME }}-registry-connection
+#        namespace: ${{ env.NAMESPACE }}
     
     # Delete cronjob if exists
     - run: |
