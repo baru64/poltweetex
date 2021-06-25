@@ -9,3 +9,4 @@ venv
 bin
 node_modules
 kube-conf.yml
+env.sh
