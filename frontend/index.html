@@ -39,20 +39,17 @@
               <tr>
                 <th><abbr title="Numers">Nr</abbr></th>
                 <th>Polityk</th>
-                <th><abbr title="Party">Partia</abbr></th>
                 <th><abbr title="Word">Słowo</abbr></th>
-                <th><abbr title="Last_TT">Last Tweet</abbr></th>
-                <th><abbr title="TweetCount">Nr of Tweets</abbr></th>
+                <th><abbr title="TweetCount">Liczba twittow</abbr></th>
               </tr>
             </thead>
             <tbody>
                 <div id ="Table">
                     <tr v-for = "(tweet,index) in tweets">
                         <th>{{index+1}}</th>
-                        <td><p>{{tweet.name}} {{tweet.surname}}</p></td>
+                        <td><p>{{tweet.name}}</p></td>
                         <td>{{tweet.party}}</td>
                         <td>{{tweet.word}}</td>
-                        <td>{{tweet.lastTT}}</td>
                         <td>{{tweet.count}}</td>
                     </tr>
                 </div>

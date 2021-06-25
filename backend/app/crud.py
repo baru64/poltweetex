@@ -54,7 +54,7 @@ def delete_all_politicians(db: Session):
 
 def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
     if(politic != 0):
-        return db.query(models.Word).filter(models.Word.politician_id == politic).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+        return db.query(models.Word).filter(models.Word.politician_id == str(politic)).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
     else:
         return db.query(models.Word).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
 

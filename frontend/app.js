@@ -8,14 +8,6 @@ const app = Vue.createApp({
             showPoliticsFromSejm: false,
             party: '',
             tweets: [
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'Husaria', word: 'Kurde', lastTT: '20:10 2021.03.04', count: 3 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'SIemanko', lastTT: '20:10 2021.03.04', count: 5 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Elo', lastTT: '20:10 2021.03.04', count: 999 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Yo', lastTT: '20:10 2021.03.04', count: 123 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Mordo', lastTT: '20:10 2021.03.04', count: -12 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Co', lastTT: '20:10 2021.03.04', count: 0 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Tu', lastTT: '20:10 2021.03.04', count: -123 },
-                { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Robisz', lastTT: '20:10 2021.03.04', count: 1.5 },
             ],
             politics: [],
             parties: []
@@ -54,7 +46,11 @@ const app = Vue.createApp({
         },
         async getPoliticainWords(politic) {
             console.log(politic)
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians', { params: { 'politician': politic.twitter_id } })
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politician': politic.twitter_id } })
+            for(const data of response.data){
+                console.log(data);
+                this.tweets.push({name:politic.name,word:data.word,count:data.count});
+            }
         }
     }
 });
