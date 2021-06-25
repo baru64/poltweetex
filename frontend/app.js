@@ -45,8 +45,8 @@ const app = Vue.createApp({
 
         },
         async getPoliticainWords(politic) {
-            console.log(politic)
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politician': politic.twitter_id } })
+            this.tweets =[]
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id } })
             for(const data of response.data){
                 console.log(data);
                 this.tweets.push({name:politic.name,word:data.word,count:data.count});
