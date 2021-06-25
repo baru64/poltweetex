@@ -39,13 +39,14 @@ const app = Vue.createApp({
         async getPoselsFromParty(party) {
             const party_id = party.id
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties', {party_id})
+            console.log(party_id);
             this.showPoliticsFromSejm = false;
             this.party = party
             this.showPoliticsFromParty = true;
         },
         async getPoselsFromSejm() {
             const party_id = 0
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians')
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians', {party_id})
             console.log(response);
             this.politics = response.data
             this.party = 'Sejmu';
