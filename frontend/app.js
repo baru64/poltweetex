@@ -44,6 +44,7 @@ const app = Vue.createApp({
             console.log("Get Posels in Party from DB");
             this.showPoliticsFromSejm = false;
             this.party = party
+            console.log(party.id)
             this.showPoliticsFromParty = true;
         },
         async getPoselsFromSejm() {
