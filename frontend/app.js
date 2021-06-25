@@ -2,7 +2,7 @@ const app = Vue.createApp({
     data() {
         return {
             word: '',
-            title: 'Twitter Of Politics',
+            title: 'Twittexpol',
             showParties: false,
             showPoliticsFromParty: false,
             showPoliticsFromSejm: false,
@@ -21,7 +21,7 @@ const app = Vue.createApp({
         async getSejm() {
             resetState(this);
             this.tweets = []
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { limit: 500 } })
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { limit: 200 } })
             const politiciansResponse = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians')
             for (const data of response.data) {
                 for (const politician of politiciansResponse.data) {
@@ -59,6 +59,17 @@ const app = Vue.createApp({
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id } })
             for (const data of response.data) {
                 this.tweets.push({ name: politic.name, word: data.word, count: data.count });
+            }
+        }
+    },
+    async created() {
+        const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { limit: 200 } })
+        const politiciansResponse = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians')
+        for (const data of response.data) {
+            for (const politician of politiciansResponse.data) {
+                if (data.politician_id === politician.twitter_id) {
+                    this.tweets.push({ name: politician.name, word: data.word, count: data.count });
+                }
             }
         }
     }
