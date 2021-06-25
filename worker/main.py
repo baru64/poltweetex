@@ -34,20 +34,21 @@ def setupDB():
         parties = json.load(politicians_json)
     with SessionLocal() as db:
         for party in parties:
-            # skip if exists
-            new_party = models.Party(
-                id=party["party_ID"],
-                name=party['Party']
-            )
-            for politician in party["Politicians"]:
-                new_politician = models.Politician(
-                    twitter_id=politician['ID'],
-                    name=politician['Name'],
-                    party_id=party["party_ID"],
-                    last_since_id=None
+            if db.query(models.Party).get(party["party_ID"]) is None:
+                new_party = models.Party(
+                    id=party["party_ID"],
+                    name=party['Party']
                 )
-                db.add(new_politician)
-            db.add(new_party)
+                db.add(new_party)
+            for politician in party["Politicians"]:
+                if db.query(models.Politician).get(politician["ID"]) is None:
+                    new_politician = models.Politician(
+                        twitter_id=politician['ID'],
+                        name=politician['Name'],
+                        party_id=party["party_ID"],
+                        last_since_id=None
+                    )
+                    db.add(new_politician)
         db.commit()
 
 
