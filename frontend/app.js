@@ -17,11 +17,7 @@ const app = Vue.createApp({
                 { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Tu', lastTT: '20:10 2021.03.04', count: -123 },
                 { name: 'Filip', surname: 'Piwowarczyk', party: 'PO', word: 'Robisz', lastTT: '20:10 2021.03.04', count: 1.5 },
             ],
-            politics: [
-                { name: 'Jan', surname: 'Brzechwa', id: 12343321 },
-                { name: 'Karol', surname: 'Krawczyk', id: 12343321 },
-                { name: 'Twoja', surname: 'Mama', id: 12343321 },
-            ],
+            politics: [],
             parties: []
         }
     },
@@ -40,14 +36,15 @@ const app = Vue.createApp({
             this.showPoliticsFromSejm = false;
             this.showParties = !this.showParties;
         },
-        getPoselsFromParty(party) {
-            console.log("Get Posels in Party from DB");
+        async getPoselsFromParty(party) {
+            const party_id = party.id
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties', {party_id})
             this.showPoliticsFromSejm = false;
             this.party = party
-            console.log(party.id)
             this.showPoliticsFromParty = true;
         },
         async getPoselsFromSejm() {
+            const party_id = 0
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians')
             console.log(response);
             this.politics = response.data

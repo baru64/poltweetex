@@ -8,6 +8,7 @@
         "@pulumi/azuread": "^4.0.0",
         "@pulumi/pulumi": "^3.5.1",
         "@pulumi/random": "^4.0.0",
-        "@pulumi/tls": "^3.4.0"
+        "@pulumi/tls": "^3.4.0",
+        "axios": "^0.21.1"
     }
 }

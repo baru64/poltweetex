@@ -27,8 +27,8 @@ def delete_all_parties(db: Session):
 
 # Polticians crud
 
-def get_politicians(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Politician).offset(skip).limit(limit).all()
+def get_politicians(party: int, db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Politician).filter(models.Politician.party_id == party).offset(skip).limit(limit).all()
 
 
 def create_politician(db: Session, politician: schemas.PoliticianCreate):

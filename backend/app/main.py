@@ -61,10 +61,11 @@ def read_parties(skip: int = 0,
 
 
 @app.get("/politicians", response_model=List[schemas.Politician])
-def read_politicians(skip: int = 0,
+def read_politicians(party: int = 0,
+                     skip: int = 0,
                      limit: int = 100,
                      db: Session = Depends(get_db)):
-    politicians = crud.get_politicians(db, skip=skip, limit=limit)
+    politicians = crud.get_politicians(party, db, skip=skip, limit=limit)
     return politicians
 
 
