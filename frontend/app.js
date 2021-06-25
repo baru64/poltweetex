@@ -18,9 +18,15 @@ const app = Vue.createApp({
             console.log(word);
             this.word = '';
         },
-        getSejm() {
-            console.log("Get All words from DB");
+        async getSejm() {
             resetState(this);
+            this.tweets = []
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words')
+            for (const data of response.data) {
+                const response = await axios.get(`https://poltweetex.northeurope.cloudapp.azure.com/politicians/${data.politician_id}`)
+                this.tweets.push({ name: response.data.politician_id, word: data.word, count: data.count });
+            }
+
         },
         async getParty() {
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
@@ -45,11 +51,11 @@ const app = Vue.createApp({
 
         },
         async getPoliticainWords(politic) {
-            this.tweets =[]
+            this.tweets = []
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id } })
-            for(const data of response.data){
-                console.log(data);
-                this.tweets.push({name:politic.name,word:data.word,count:data.count});
+            for (const data of response.data) {
+                console.log(data)
+                this.tweets.push({ name: politic.name, word: data.word, count: data.count });
             }
         }
     }
