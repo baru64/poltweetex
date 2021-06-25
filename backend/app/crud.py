@@ -72,7 +72,7 @@ def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_word_index(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.WordIndex).offset(skip).limit(limit).all()
+    return db.query(models.WordIndex).filter(func.length(models.Word.word) > 1).offset(skip).limit(limit).all()
 
 
 def mergeWords(words):

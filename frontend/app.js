@@ -21,7 +21,7 @@ const app = Vue.createApp({
         async getSejm() {
             resetState(this);
             this.tweets = []
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words')
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { limit: 500 } })
             const politiciansResponse = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians')
             for (const data of response.data) {
                 for (const politician of politiciansResponse.data) {
