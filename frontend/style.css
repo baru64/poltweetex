@@ -15,11 +15,11 @@
 }
 
 body{
-    height: 4600px;
     background-color: 	#47b1f3;
     max-width: 10000px;
     margin: 20px auto;
     padding-bottom: 50px;
+    min-height: 1600px;
 
 }
 

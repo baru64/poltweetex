@@ -33,13 +33,13 @@ def get_politicians(party: int, db: Session, skip: int = 0, limit: int = 100):
     else:
         return db.query(models.Politician).filter(
             models.Politician.party_id == party
-            ).offset(skip).limit(limit).all()
+        ).offset(skip).limit(limit).all()
 
 
 def get_politician(politicianId: str, db: Session):
     return db.query(models.Politician).filter(
         models.Politician.twitter_id == politicianId
-        ).one()
+    ).one()
 
 
 def create_politician(db: Session, politician: schemas.PoliticianCreate):
@@ -63,10 +63,10 @@ def delete_all_politicians(db: Session):
 def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
     if(politic != 0):
         words = db.query(models.Word).filter(
-                models.Word.politician_id == str(politic)
-            ).filter(
-                func.length(models.Word.word) > 1
-            ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+            models.Word.politician_id == str(politic)
+        ).filter(
+            func.length(models.Word.word) > 1
+        ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
         return mergeWords(words)
     else:
         print("else")
@@ -81,7 +81,7 @@ def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
 def get_word_index(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.WordIndex).filter(
         func.length(models.Word.word) > 1
-        ).offset(skip).limit(limit).all()
+    ).offset(skip).limit(limit).all()
 
 
 def mergeWords(words):
