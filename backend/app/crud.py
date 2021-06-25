@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
-from operator import add
+from sqlalchemy.sql.expression import func
 
 # Party crud
 
@@ -59,7 +59,7 @@ def delete_all_politicians(db: Session):
 def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
     if(politic != 0):
         words = db.query(models.Word).filter(models.Word.politician_id == str(
-            politic)).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+            politic)).filter(func.length(models.Word.word) > 1).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
         return mergeWords(words)
     else:
         print("else")

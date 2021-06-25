@@ -79,5 +79,5 @@ def read_words(politic: int = 0,
                skip: int = 0,
                limit: int = 100,
                db: Session = Depends(get_db)):
-    words = crud.get_words(politic, db, skip=skip, limit=limit)
-    return words
+    return crud.get_words(politic, db, skip=skip, limit=limit)
+    
