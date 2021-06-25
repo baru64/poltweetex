@@ -30,13 +30,6 @@ spec:
           value: postgres-postgresql
         - name: POSTGRESQL_NAME
           value: exampledb
-        volumeMounts:
-        - name: config-volume
-          mountPath: /etc/config
-      volumes:
-      - name: config-volume
-        configMap:
-          name: app-config
 
 ---
 apiVersion: v1

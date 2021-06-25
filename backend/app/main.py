@@ -6,36 +6,9 @@ from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
-from .database import SessionLocal, engine
-
-models.Base.metadata.drop_all(bind=engine)
-models.Base.metadata.create_all(bind=engine)
+from .database import SessionLocal
 
 app = FastAPI()
-
-
-@app.on_event("startup")
-async def startup_event():
-    with open("./app/data/parties.json", 'r') as politicians_json:
-        parties = json.load(politicians_json)
-    with SessionLocal() as db:
-        crud.delete_all_parties(db)
-        crud.delete_all_politicians(db)
-        for party in parties:
-            new_party = models.Party(
-                id=party["party_ID"],
-                name=party['Party']
-            )
-            for politician in party["Politicians"]:
-                new_politician = models.Politician(
-                    twitter_id=politician['ID'],
-                    name=politician['Name'],
-                    party_id=party["party_ID"],
-                    last_update=date.min
-                )
-                db.add(new_politician)
-            db.add(new_party)
-        db.commit()
 
 
 # dependency

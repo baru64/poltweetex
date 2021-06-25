@@ -6,9 +6,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://postgres:{}@{}/{}".format(
-    os.environ['POSTGRESQL_PASSWORD'],
-    os.environ['POSTGRESQL_URL'],
-    os.environ['POSTGRESQL_NAME']
+    os.getenv('POSTGRESQL_PASSWORD'),
+    os.getenv('POSTGRESQL_URL'),
+    os.getenv('POSTGRESQL_NAME')
 )
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

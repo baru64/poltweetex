@@ -1,53 +1,96 @@
 import tweepy
 import string
 import os
-
+import json
+from typing import List, Dict
+import logging
+import sys
 
 from . import models
-from .database import SessionLocal
+from .database import SessionLocal, engine
 
 # INDEX = int(os.environ['JOB_COMPLETION_INDEX'])
 
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-auth = tweepy.OAuthHandler(os.environ['API_Key'], os.environ['API_Secret_Key'])
-auth.set_access_token(os.environ['Access_Token'],
-                      os.environ['Access_Token_Secret'])
+auth = tweepy.OAuthHandler(
+    os.getenv('API_Key'),
+    os.getenv('API_Secret_Key')
+)
+auth.set_access_token(
+    os.getenv('Access_Token'),
+    os.getenv('Access_Token_Secret')
+)
 
 twitterAPI = tweepy.API(auth)
 
 
+def setupDB():
+    models.Base.metadata.drop_all(bind=engine)
+    models.Base.metadata.create_all(bind=engine)
+
+    with open("/etc/config/parties.json", 'r') as politicians_json:
+        parties = json.load(politicians_json)
+    with SessionLocal() as db:
+        for party in parties:
+            # skip if exists
+            new_party = models.Party(
+                id=party["party_ID"],
+                name=party['Party']
+            )
+            for politician in party["Politicians"]:
+                new_politician = models.Politician(
+                    twitter_id=politician['ID'],
+                    name=politician['Name'],
+                    party_id=party["party_ID"],
+                    last_since_id=None
+                )
+                db.add(new_politician)
+            db.add(new_party)
+        db.commit()
+
+
 def main():
     with SessionLocal() as db:
-        politicians = db.query(models.Politician).all()
+        politicians: List[models.Politician]  = db.query(models.Politician).all()
         for politician in politicians:
-            print("Reading tweets of "+politician.name)
-            twitts = twitterAPI.user_timeline(user_id=politician.twitter_id,
-                                              count=10,
-                                              include_rts=False,
-                                              tweet_mode='extended'
-                                              )
-            print("Analizing tweets of "+politician.name)
-            for info in reversed(twitts):
-                if(info.created_at > politician.last_update):
-                    politician.last_update = info.created_at
-                    db.add(politician)
-                else:
-                    continue
-                info.full_text = simplifyTweetText(info.full_text)
-                dict = mapReducer(info.full_text)
-                for key in dict:
+            logger.debug(f"Reading {politician.name} tweets")
+            tweets = None
+            if politician.last_since_id is None:
+                tweets = twitterAPI.user_timeline(
+                    user_id=politician.twitter_id,
+                    count=10,
+                    include_rts=False,
+                    tweet_mode='extended'
+                )
+            else:
+                tweets = twitterAPI.user_timeline(
+                    user_id=politician.twitter_id,
+                    since_id=politician.last_since_id,
+                    include_rts=False,
+                    tweet_mode='extended'
+                )
+            logger.debug(f"Analyzing {politician.name} tweets")
+            # set new last id
+            politician.last_since_id = tweets[0].id;
+            db.add(politician)
+            for tweet in tweets:
+                tweet.full_text = simplifyTweetText(tweet.full_text)
+                words = mapReducer(tweet.full_text)
+                for word, count in words.items():
                     new_word = models.Word(
-                        word=key,
+                        word=word,
                         politician_id=politician.twitter_id,
-                        tweet_id=info.id,
-                        count=dict[key],
-                        date=info.created_at
+                        tweet_id=tweet.id,
+                        count=count,
+                        date=tweet.created_at
                     )
                     db.add(new_word)
         db.commit()
 
 
-def replaceUnwantedSigns(sentence):
+def replaceUnwantedSigns(sentence: str) -> str:
     polishSigns = {'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', '…': '',
                    'ó': 'o', 'ś': 's', 'ż': 'z', 'ź': 'z', '”': '', "„": ""}
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
@@ -56,18 +99,18 @@ def replaceUnwantedSigns(sentence):
     return sentence
 
 
-def removePutationMarks(sentence):
+def removePutationMarks(sentence: str) -> str:
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
     return sentence
 
 
-def simplifyTweetText(sentence):
+def simplifyTweetText(sentence: str) -> str:
     sentence = replaceUnwantedSigns(sentence)
     sentence = removePutationMarks(sentence)
     return sentence
 
 
-def mapReducer(text):
+def mapReducer(text) -> Dict:
     words = text.split(' ')
     wordsDict = {}
     for word in words:
@@ -81,4 +124,6 @@ def mapReducer(text):
 
 
 if __name__ == "__main__":
+    if os.getenv("SETUP_DB", "false") == "true":
+        setupDB()
     main()

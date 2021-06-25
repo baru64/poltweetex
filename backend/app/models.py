@@ -16,7 +16,7 @@ class Politician(Base):
     twitter_id = Column(String, primary_key=True, index=True)
     name = Column(String, index=True)
     party_id = Column(Integer, index=True)
-    last_update = Column(DateTime, index=True)
+    last_since_id = Column(String, default=None)
 
 
 class Word(Base):
@@ -26,8 +26,8 @@ class Word(Base):
     word = Column(String, index=True)
     politician_id = Column(String, index=True)
     tweet_id = Column(String, index=True)
-    count = Column(Integer, index=True)
-    date = Column(DateTime, index=True)
+    count = Column(Integer)
+    date = Column(DateTime)
 
 
 class WordIndex(Base):

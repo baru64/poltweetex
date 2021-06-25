@@ -39,3 +39,12 @@ spec:
             secretKeyRef:
               name: twitter-secret
               key: access-token-secret
+        - name: SETUP_DB
+          value: true
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: app-config

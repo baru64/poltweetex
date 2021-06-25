@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -25,7 +27,7 @@ class PoliticianBase(BaseModel):
     name: str
     twitter_id: str
     party_id: int
-    last_update: datetime
+    last_since_id: Optional[str] = None
 
 
 class PoliticianCreate(PoliticianBase):
