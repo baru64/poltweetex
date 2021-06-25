@@ -15,7 +15,7 @@
 }
 
 body{
-    background-color: 	#47b1f3;
+    background-color: 	#7594d8;
     max-width: 10000px;
     margin: 20px auto;
     padding-bottom: 50px;
@@ -28,6 +28,11 @@ body{
     background-color: wheat;
 }
 
+.tableContainer{
+    margin-left: 80px;
+    width: 635px;
+    border-radius: 100px;
+}
 
 .buttons{
     position:relative;

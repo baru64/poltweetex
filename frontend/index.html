@@ -33,29 +33,29 @@
                 <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords(politic)">{{politic.name}} {{politic.surname}}</button>
             </div>
         </div>
-
-        <table class="table column is-9 is-offset-1 myTable"> <!-- Table will show data that we want to output -->
-            <thead>
-              <tr>
-                <th><abbr title="Numers">Nr</abbr></th>
-                <th>Polityk</th>
-                <th><abbr title="Word">Słowo</abbr></th>
-                <th><abbr title="TweetCount">Liczba wystąpień</abbr></th>
-              </tr>
-            </thead>
-            <tbody>
-                <div id ="Table">
-                    <tr v-for = "(tweet,index) in tweets">
-                        <th>{{index+1}}</th>
-                        <td><p>{{tweet.name}}</p></td>
-                        <td>{{tweet.party}}</td>
-                        <td>{{tweet.word}}</td>
-                        <td>{{tweet.count}}</td>
-                    </tr>
-                </div>
-            </tbody>
-          </table>
+        <div class = "tableContainer">
+            <table class="table is-fullwidth is-hoverable is-striped myTable"> <!-- Table will show data that we want to output -->
+                <thead>
+                  <tr>
+                    <th class="row "><abbr title="Numers">Nr</abbr></th>
+                    <th class="row is-two-thirds ">Polityk</th>
+                    <th class="row"><abbr title="Word">Słowo</abbr></th>
+                    <th class="row"><abbr title="TweetCount">Liczba wystąpień</abbr></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <div id ="Table">
+                        <tr v-for = "(tweet,index) in tweets">
+                            <th>{{index+1}}</th>
+                            <td><p>{{tweet.name}}</p></td>
+                            <td>{{tweet.word}}</td>
+                            <td>{{tweet.count}}</td>
+                        </tr>
+                    </div>
+                </tbody>
+              </table>
         </div>
-    </body>
 
+    </div>
+    </body>
 </html>
