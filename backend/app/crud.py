@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-
 from . import models, schemas
+from operator import add
 
 # Party crud
 
@@ -58,12 +58,28 @@ def delete_all_politicians(db: Session):
 
 def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
     if(politic != 0):
-        return db.query(models.Word).filter(models.Word.politician_id == str(politic)).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+        words = db.query(models.Word).filter(models.Word.politician_id == str(
+            politic)).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+        return mergeWords(words)
     else:
-        return db.query(models.Word).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+        print("else")
+        words = db.query(models.Word).order_by(
+            models.Word.count.desc()).offset(skip).limit(limit).all()
+        return mergeWords(words)
+
 
 # WordIndex crud
 
 
 def get_word_index(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.WordIndex).offset(skip).limit(limit).all()
+
+
+def mergeWords(words):
+    for i, word in enumerate(words):
+        for j, wordv2 in enumerate(words):
+            if word.word == wordv2.word and j != i:
+                word.count = word.count+wordv2.count
+                words.pop(j)
+    words = sorted(words, key=lambda word: word.count, reverse=True)
+    return words
