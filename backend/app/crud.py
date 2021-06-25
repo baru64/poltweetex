@@ -70,7 +70,9 @@ def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
         return mergeWords(words)
     else:
         print("else")
-        words = db.query(models.Word).order_by(
+        words = db.query(models.Word).filter(
+            func.length(models.Word.word) > 1
+        ).order_by(
             models.Word.count.desc()).offset(skip).limit(limit).all()
         return mergeWords(words)
 
