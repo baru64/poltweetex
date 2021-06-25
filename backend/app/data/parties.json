@@ -1,5 +1,23 @@
 [
     {
+        "Party": "PO",
+        "party_ID": 1,
+        "Politicians": [
+            {
+                "Name": "bbudka",
+                "ID": "118739645"
+            },
+            {
+                "Name": "tadeuszarkit",
+                "ID": "364925029"
+            },
+            {
+                "Name": "AndrzejBiernat",
+                "ID": "362466409"
+            }
+        ]
+    },
+    {
         "Party": "PIS",
         "party_ID": 2,
         "Politicians": [
@@ -18,6 +36,62 @@
             {
                 "Name": "SasinJacek",
                 "ID": "2827443467"
+            }
+        ]
+    },
+    {
+        "Party": "Lewica",
+        "party_ID": 3,
+        "Politicians": [
+            {
+                "Name": "RobertBiedron",
+                "ID": "466781777"
+            },
+            {
+                "Name": "ZandbergRAZEM",
+                "ID": "4008009335"
+            },
+            {
+                "Name": "MagdaBiejat",
+                "ID": "76041641"
+            }
+        ]
+    },
+    {
+        "Party": "Konfederacja",
+        "party_ID": 4,
+        "Politicians": [
+            {
+                "Name": "krzysztofbosak",
+                "ID": "80676829"
+            }
+        ]
+    },
+    {
+        "Party": "PSL",
+        "party_ID": 5,
+        "Politicians": [
+            {
+                "Name": "KosiniakKamysz",
+                "ID": "955239446"
+            }
+        ]
+    },
+    {
+        "Party": "Kukiz2015",
+        "party_ID": 6,
+        "Politicians": [
+            {
+                "Name": "pkukiz",
+                "ID": "1262921364"
+            },
+            {
+                "Name": "jsachajko",
+                "ID": "3251198688"
+            },
+            {
+                "Name": "styszka",
+                "ID": "31377422"
             }
         ]
     }
