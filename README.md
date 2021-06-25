@@ -1,4 +1,4 @@
-# TwitterScraper
+# Twittexpol
 Api to scrap data from twitter
 
 # Backend

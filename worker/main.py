@@ -54,14 +54,15 @@ def setupDB():
 
 def main():
     with SessionLocal() as db:
-        politicians: List[models.Politician]  = db.query(models.Politician).all()
+        politicians: List[models.Politician] = db.query(
+            models.Politician).all()
         for politician in politicians:
             logger.debug(f"Reading {politician.name} tweets")
             tweets = None
             if politician.last_since_id is None:
                 tweets = twitterAPI.user_timeline(
                     user_id=politician.twitter_id,
-                    count=10,
+                    count=100,
                     include_rts=False,
                     tweet_mode='extended'
                 )
@@ -74,7 +75,7 @@ def main():
                 )
             logger.debug(f"Analyzing {politician.name} tweets")
             # set new last id
-            politician.last_since_id = tweets[0].id;
+            politician.last_since_id = tweets[0].id
             db.add(politician)
             for tweet in tweets:
                 tweet.full_text = simplifyTweetText(tweet.full_text)

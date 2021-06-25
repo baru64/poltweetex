@@ -15,8 +15,7 @@ const app = Vue.createApp({
     },
     methods: {
         sumitSearch(word) {
-            console.log(word);
-            this.word = '';
+            this.tweets = this.tweets.filter(tweet => tweet.word.includes(word))
         },
         async getSejm() {
             resetState(this);
