@@ -44,9 +44,12 @@ const app = Vue.createApp({
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
             this.parties = response.data
             for(const party of this.parties){
+                console.log(party.id);
                 const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: { limit: 100, party: party.id } })
-                for (const data of response.data) {
-                    this.tweets.push({name: party.name, word: partyWords.word, count: partyWords.count });
+                console.log(partyWords);
+                for (const data of partyWords.data) {
+                    console.log(data);
+                    this.tweets.push({name: party.name, word: data.word, count: data.count });
                 }
             }
             // this.tweets.sort((a,b)=> (a.count>b.count)?1:-1)
