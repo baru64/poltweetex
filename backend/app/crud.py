@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from . import models, schemas
 from sqlalchemy.sql.expression import func
@@ -60,31 +61,37 @@ def delete_all_politicians(db: Session):
 # Word crud
 
 
-def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
+def get_words(politic, db: Session, minusDays: datetime = 7, skip: int = 0, limit: int = 100):
+    date = timedelta(minusDays)
     words = db.query(models.Word).filter(
         models.Word.politician_id == str(politic)
     ).filter(
         func.length(models.Word.word) > 1
-    ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+    ).filter(
+        models.Word.date > date).order_by(
+            models.Word.count.desc()).offset(skip).limit(limit).all()
     return mergeWords(words)
 
 
-def get_words_for_sejm(db: Session, skip: int = 0, limit: int = 100):
-    words = db.query(models.Word).filter(func.length(
-        models.Word.word) > 1).order_by(
+def get_words_for_sejm(db: Session, minusDays: int = 7, skip: int = 0, limit: int = 100):
+    date = timedelta(minusDays)
+    words = db.query(models.Word).filter(
+        func.length(models.Word.word) > 1).filter(
+            models.Word.date > date).order_by(
         models.Word.count.desc()).offset(skip).limit(limit).all()
     return mergeWords(words)
 
 
-def get_words_for_party(party, db: Session, skip: int = 0, limit: int = 100):
+def get_words_for_party(party: int, db: Session, minusDays: datetime = 7, skip: int = 0, limit: int = 100):
+    date = timedelta(minusDays)
     politciansIds = []
     politiciansObject = db.query(models.Politician).filter(
         models.Politician.party_id == party).all()
     for obj in politiciansObject:
         politciansIds.append(obj.twitter_id)
     words = db.query(models.Word).filter(
-        models.Politician.twitter_id in politciansIds
-    ).filter(
+        models.Word.politician_id in politciansIds
+    ).filter(models.Word.date > date).filter(
         func.length(models.Word.word) > 1
     ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
     return mergeWords(words)
