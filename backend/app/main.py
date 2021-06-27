@@ -47,14 +47,16 @@ def read_politician(politicianId: str, db: Session = Depends(get_db)):
 
 @app.get("/words", response_model=List[schemas.Word])
 def read_words(politic: int = 0,
+               minusDays: int = 7,
                skip: int = 0,
                limit: int = 100,
                db: Session = Depends(get_db)):
-    return crud.get_words(politic, db, skip=skip, limit=limit)
+    return crud.get_words(politic, db, minusDays, skip=skip, limit=limit)
 
 
 @app.get("/words/sejm", response_model=List[schemas.Word])
-def read_words_for_sejm(skip: int = 0,
+def read_words_for_sejm(minusDays: int = 7,
+                        skip: int = 0,
                         limit: int = 100,
                         db: Session = Depends(get_db)):
     return crud.get_words_for_sejm(db, skip=skip, limit=limit)
@@ -62,6 +64,7 @@ def read_words_for_sejm(skip: int = 0,
 
 @app.get("/words/party", response_model=List[schemas.Word])
 def read_words_for_party(party=1,
+                         minusDays: int = 7,
                          skip: int = 0,
                          limit: int = 100,
                          db: Session = Depends(get_db)):
