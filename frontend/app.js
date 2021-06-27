@@ -40,7 +40,7 @@ const app = Vue.createApp({
             this.showPoliticsFromSejm = false;
             this.showParties = !this.showParties;
 
-
+            this.tweets = []
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
             this.parties = response.data
             for(const party of this.parties){
@@ -49,7 +49,7 @@ const app = Vue.createApp({
                     this.tweets.push({name: party.name, word: partyWords.word, count: partyWords.count });
                 }
             }
-            this.tweets.sort((a,b)=> (a.count>b.count)?1:-1)
+            // this.tweets.sort((a,b)=> (a.count>b.count)?1:-1)
 
         },
         async getPoselsFromParty(party) {
