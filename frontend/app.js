@@ -28,7 +28,7 @@ const app = Vue.createApp({
             resetState(this);
             this.tweets = [];
             console.log(this.timeline)
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { minusDays: this.timeline, limit: 1000 } })
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { minusDays: this.timeline, limit: 100000 } })
             for (const data of response.data) {
                 this.tweets.push({ word: data.word, count: data.count });
             }
@@ -39,13 +39,14 @@ const app = Vue.createApp({
             this.showPoliticsWords = false;
             this.showSejmWords = false;
             this.showPoliticsFromSejm = false;
+            this.showPoliticsFromParty = false;
             this.showParties = !this.showParties;
 
             this.tweets = []
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
             this.parties = response.data
             for (const party of this.parties) {
-                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: { party: party.id, limit: 1000, minusDays: this.timeline } })
+                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: { party: party.id, limit: 100000, minusDays: this.timeline } })
                 for (const data of partyWords.data) {
                     this.tweets.push({ name: party.name, word: data.word, count: data.count });
                 }
@@ -77,7 +78,7 @@ const app = Vue.createApp({
         },
         async getPoliticainWords(politic) {
             this.tweets = []
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id, minusDays: this.timeline } })
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id, minusDays: this.timeline, limit: 10000 } })
             for (const data of response.data) {
                 this.tweets.push({ name: politic.name, word: data.word, count: data.count });
             }

@@ -87,10 +87,11 @@ def get_words_for_party(party: int, db: Session, minusDays: datetime = 7, skip: 
     politciansIds = []
     politiciansObject = db.query(models.Politician).filter(
         models.Politician.party_id == party).all()
+    print(politiciansObject)
     for obj in politiciansObject:
         politciansIds.append(obj.twitter_id)
     words = db.query(models.Word).filter(
-        models.Word.politician_id in politciansIds
+        models.Word.politician_id.in_(politciansIds)
     ).filter(models.Word.date > date).filter(
         func.length(models.Word.word) > 1
     ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
