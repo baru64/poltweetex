@@ -59,7 +59,7 @@ def read_words_for_sejm(minusDays: int = 7,
                         skip: int = 0,
                         limit: int = 100,
                         db: Session = Depends(get_db)):
-    return crud.get_words_for_sejm(db, skip=skip, limit=limit)
+    return crud.get_words_for_sejm(db, minusDays, skip=skip, limit=limit)
 
 
 @app.get("/words/party", response_model=List[schemas.Word])
@@ -68,4 +68,4 @@ def read_words_for_party(party=1,
                          skip: int = 0,
                          limit: int = 100,
                          db: Session = Depends(get_db)):
-    return crud.get_words_for_party(party, db, skip=skip, limit=limit)
+    return crud.get_words_for_party(party, db, minusDays, skip=skip, limit=limit)
