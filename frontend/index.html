@@ -23,9 +23,10 @@
                 <button class="button is-info is-light" @click="getParty()">Partie</button>
                 <button class="button is-info is-light" @click="getPoselsFromSejm()">Posełowie</button>
 
-                <button class="button is-warning is-light is-small timeline" @click="changeTimeline(1)">1 Dzień</button>
                 <button class="button is-warning is-light is-small timeline" @click="changeTimeline(7)">1 Tydzień</button>
                 <button class="button is-warning is-light is-small timeline" @click="changeTimeline(30)">1 Miesiąc</button>
+                <button class="button is-warning is-light is-small timeline" @click="changeTimeline(99999)">Zawsze</button>
+
             </div> 
             <div class = "buttons" v-if = "showParties">
                 <button class="button is-warning is-light" v-for="party in parties" @click="getPoselsFromParty(party)">{{party.name}}</button>

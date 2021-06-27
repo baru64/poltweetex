@@ -9,7 +9,7 @@ const app = Vue.createApp({
             showPoliticsWords: false,
             showPartyWords: false,
             showSejmWords: true,
-            timeline: 1,
+            timeline: 30,
             party: '',
             tweets: [
             ],
@@ -27,7 +27,8 @@ const app = Vue.createApp({
             this.showSejmWords = true;
             resetState(this);
             this.tweets = [];
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 1000 } })
+            console.log(this.timeline)
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { minusDays: this.timeline, limit: 1000 } })
             for (const data of response.data) {
                 this.tweets.push({ word: data.word, count: data.count });
             }
@@ -43,13 +44,10 @@ const app = Vue.createApp({
             this.tweets = []
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
             this.parties = response.data
-            for(const party of this.parties){
-                console.log(party.id);
-                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: {  party: party.id, limit: 1000 } })
-                console.log(partyWords);
+            for (const party of this.parties) {
+                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: { party: party.id, limit: 1000, minusDays: this.timeline } })
                 for (const data of partyWords.data) {
-                    console.log(data);
-                    this.tweets.push({name: party.name, word: data.word, count: data.count });
+                    this.tweets.push({ name: party.name, word: data.word, count: data.count });
                 }
             }
             // this.tweets.sort((a,b)=> (a.count>b.count)?1:-1)
@@ -79,13 +77,12 @@ const app = Vue.createApp({
         },
         async getPoliticainWords(politic) {
             this.tweets = []
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id } })
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { 'politic': politic.twitter_id, minusDays: this.timeline } })
             for (const data of response.data) {
                 this.tweets.push({ name: politic.name, word: data.word, count: data.count });
             }
         },
         changeTimeline(time) {
-            console.log(time);
             this.timeline = time;
         }
     },
@@ -96,7 +93,7 @@ const app = Vue.createApp({
         this.showSejmWords = true;
         resetState(this);
         this.tweets = [];
-        const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 1000 } })
+        const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 1000, minusDays: this.timeline } })
         for (const data of response.data) {
             this.tweets.push({ word: data.word, count: data.count });
         }
