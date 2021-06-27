@@ -61,7 +61,7 @@ def main():
             if politician.last_since_id is None:
                 tweets = twitterAPI.user_timeline(
                     user_id=politician.twitter_id,
-                    count=100,
+                    count=10000,
                     include_rts=False,
                     tweet_mode='extended'
                 )
