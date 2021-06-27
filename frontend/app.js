@@ -26,14 +26,10 @@ const app = Vue.createApp({
             this.showPoliticsWords = false;
             this.showSejmWords = true;
             resetState(this);
-            this.tweets = []
+            this.tweets = [];
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 200 } })
             for (const data of response.data) {
-                for (const politician of politiciansResponse.data) {
-                    if (data.politician_id === politician.twitter_id) {
-                        this.tweets.push({ name: politician.name, word: data.word, count: data.count });
-                    }
-                }
+                this.tweets.push({ name: politician.name, word: data.word, count: data.count });
             }
 
         },

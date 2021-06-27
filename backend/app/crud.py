@@ -75,14 +75,6 @@ def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
             models.Word.count.desc()).offset(skip).limit(limit).all()
         return mergeWords(words)
 
-
-def get_words_for_sejm(db: Session, skip: int = 0, limit: int = 100):
-    words = db.query(models.Word).filter(
-        func.length(models.Word.word) > 1
-    ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
-    return mergeWords(words)
-
-
 # WordIndex crud
 
 

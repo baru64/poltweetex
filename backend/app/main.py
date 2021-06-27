@@ -1,11 +1,9 @@
 from typing import List
-import json
-from datetime import date
 
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 
-from . import crud, models, schemas
+from . import crud, schemas
 from .database import SessionLocal
 
 app = FastAPI()
@@ -59,4 +57,4 @@ def read_words(politic: int = 0,
 def get_words_for_sejm(skip: int = 0,
                        limit: int = 100,
                        db: Session = Depends(get_db)):
-    return crud.get_words(db, skip=skip, limit=limit)
+    return crud.get_words(0, db, skip=skip, limit=limit)
