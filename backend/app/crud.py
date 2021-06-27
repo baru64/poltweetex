@@ -62,7 +62,7 @@ def delete_all_politicians(db: Session):
 
 
 def get_words(politic, db: Session, minusDays: datetime = 7, skip: int = 0, limit: int = 100):
-    date = timedelta(minusDays)
+    date = datetime.now() - timedelta(minusDays)
     words = db.query(models.Word).filter(
         models.Word.politician_id == str(politic)
     ).filter(
@@ -74,7 +74,7 @@ def get_words(politic, db: Session, minusDays: datetime = 7, skip: int = 0, limi
 
 
 def get_words_for_sejm(db: Session, minusDays: int = 7, skip: int = 0, limit: int = 100):
-    date = timedelta(minusDays)
+    date = datetime.now() - timedelta(minusDays)
     words = db.query(models.Word).filter(
         func.length(models.Word.word) > 1).filter(
             models.Word.date > date).order_by(
@@ -83,7 +83,7 @@ def get_words_for_sejm(db: Session, minusDays: int = 7, skip: int = 0, limit: in
 
 
 def get_words_for_party(party: int, db: Session, minusDays: datetime = 7, skip: int = 0, limit: int = 100):
-    date = timedelta(minusDays)
+    date = datetime.now() - timedelta(minusDays)
     politciansIds = []
     politiciansObject = db.query(models.Politician).filter(
         models.Politician.party_id == party).all()
