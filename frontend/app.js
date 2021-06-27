@@ -29,7 +29,7 @@ const app = Vue.createApp({
             this.tweets = [];
             const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 200 } })
             for (const data of response.data) {
-                this.tweets.push({ name: politician.name, word: data.word, count: data.count });
+                this.tweets.push({word: data.word, count: data.count });
             }
 
         },
