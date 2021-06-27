@@ -38,3 +38,8 @@ body{
     position:relative;
     left:-10px;
 }
+
+.timeline{
+    position:relative;
+    left: 95px;
+}

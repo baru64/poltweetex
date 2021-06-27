@@ -19,26 +19,73 @@
                 <button class = "button is-2" @click="sumitSearch(word)">Submit</button>
             </div> 
             <div class = "buttons">
-                <button class="button is-info is-light" @click="getSejm('Sejm')">Sejm</button>
+                <button class="button is-info is-light" @click="getSejm()">Sejm</button>
                 <button class="button is-info is-light" @click="getParty()">Partie</button>
                 <button class="button is-info is-light" @click="getPoselsFromSejm()">Posełowie</button>
+
+                <button class="button is-warning is-light is-small timeline" @click="changeTimeline(1)">1 Dzień</button>
+                <button class="button is-warning is-light is-small timeline" @click="changeTimeline(7)">1 Tydzień</button>
+                <button class="button is-warning is-light is-small timeline" @click="changeTimeline(30)">1 Miesiąc</button>
             </div> 
             <div class = "buttons" v-if = "showParties">
                 <button class="button is-warning is-light" v-for="party in parties" @click="getPoselsFromParty(party)">{{party.name}}</button>
             </div>
-            <div class = "buttons" v-if = showPoliticsFromParty>
+            <div class = "buttons are-small" v-if = showPoliticsFromParty>
                 <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords(politic)">{{politic.name}} {{politic.surname}}</button>
             </div>
-            <div class = "buttons" v-if = showPoliticsFromSejm>
+            <div class = "buttons are-small" v-if = showPoliticsFromSejm>
                 <button class="button is-success is-light" v-for = "politic in politics" @click="getPoliticainWords(politic)">{{politic.name}} {{politic.surname}}</button>
             </div>
         </div>
-        <div class = "tableContainer">
+        <div class = "tableContainer" v-if="showPoliticsWords">
             <table class="table is-fullwidth is-hoverable is-striped myTable"> <!-- Table will show data that we want to output -->
                 <thead>
                   <tr>
                     <th class="row "><abbr title="Numers">Nr</abbr></th>
                     <th class="row is-two-thirds ">Polityk</th>
+                    <th class="row"><abbr title="Word">Słowo</abbr></th>
+                    <th class="row"><abbr title="TweetCount">Liczba wystąpień</abbr></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <div id ="Table">
+                        <tr v-for = "(tweet,index) in tweets">
+                            <th>{{index+1}}</th>
+                            <td><p>{{tweet.name}}</p></td>
+                            <td>{{tweet.word}}</td>
+                            <td>{{tweet.count}}</td>
+                        </tr>
+                    </div>
+                </tbody>
+              </table>
+        </div>
+        <div class = "tableContainer" v-if="showPartyWords">
+            <table class="table is-fullwidth is-hoverable is-striped myTable"> <!-- Table will show data that we want to output -->
+                <thead>
+                  <tr>
+                    <th class="row "><abbr title="Numers">Nr</abbr></th>
+                    <th class="row is-two-thirds ">Partia</th>
+                    <th class="row"><abbr title="Word">Słowo</abbr></th>
+                    <th class="row"><abbr title="TweetCount">Liczba wystąpień</abbr></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <div id ="Table">
+                        <tr v-for = "(tweet,index) in tweets">
+                            <th>{{index+1}}</th>
+                            <td><p>{{tweet.name}}</p></td>
+                            <td>{{tweet.word}}</td>
+                            <td>{{tweet.count}}</td>
+                        </tr>
+                    </div>
+                </tbody>
+              </table>
+        </div>
+        <div class = "tableContainer" v-if="showSejmWords">
+            <table class="table is-fullwidth is-hoverable is-striped myTable"> <!-- Table will show data that we want to output -->
+                <thead>
+                  <tr>
+                    <th class="row "><abbr title="Numers">Nr</abbr></th>
                     <th class="row"><abbr title="Word">Słowo</abbr></th>
                     <th class="row"><abbr title="TweetCount">Liczba wystąpień</abbr></th>
                   </tr>
