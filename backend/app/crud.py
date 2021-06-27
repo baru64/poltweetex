@@ -80,7 +80,7 @@ def get_words_for_party(party, db: Session, skip: int = 0, limit: int = 100):
     politciansIds = []
     politiciansObject = db.query(models.Politician).filter(
         models.Politician.party_id == party).all()
-    politciansIds.push(politiciansObject.twitter_id)
+    politciansIds.append(politiciansObject.twitter_id)
     words = db.query(models.Word).filter(
         models.Politician.politician_id in politciansIds
     ).filter(
