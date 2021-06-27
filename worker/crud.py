@@ -5,7 +5,6 @@ from . import models, schemas
 
 # Party crud
 
-
 def get_parties(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Party).offset(skip).limit(limit).all()
 

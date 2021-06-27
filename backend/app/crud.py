@@ -61,19 +61,33 @@ def delete_all_politicians(db: Session):
 
 
 def get_words(politic, db: Session, skip: int = 0, limit: int = 100):
-    if(politic != 0):
-        words = db.query(models.Word).filter(
-            models.Word.politician_id == str(politic)
-        ).filter(
-            func.length(models.Word.word) > 1
-        ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
-        return mergeWords(words)
-    else:
-        words = db.query(models.Word).filter(
-            func.length(models.Word.word) > 1
-        ).order_by(
-            models.Word.count.desc()).offset(skip).limit(limit).all()
-        return mergeWords(words)
+    words = db.query(models.Word).filter(
+        models.Word.politician_id == str(politic)
+    ).filter(
+        func.length(models.Word.word) > 1
+    ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+    return mergeWords(words)
+
+
+def get_word_for_sejm(db: Session, skip: int = 0, limit: int = 100):
+    words = db.query(models.Word).filter(func.length(
+        models.Word.word) > 1).order_by(
+        models.Word.count.desc()).offset(skip).limit(limit).all()
+    return mergeWords(words)
+
+
+def get_words_for_party(party, db: Session, skip: int = 0, limit: int = 100):
+    politciansIds = []
+    politiciansObject = db.query(models.Politician).filter(
+        models.Politician.party_id == party).all()
+    politciansIds.push(politiciansObject.twitter_id)
+    words = db.query(models.Word).filter(
+        models.Politician.politician_id in politciansIds
+    ).filter(
+        func.length(models.Word.word) > 1
+    ).order_by(models.Word.count.desc()).offset(skip).limit(limit).all()
+    return mergeWords(words)
+
 
 # WordIndex crud
 

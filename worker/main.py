@@ -9,7 +9,6 @@ import sys
 from . import models
 from .database import SessionLocal, engine
 
-# INDEX = int(os.environ['JOB_COMPLETION_INDEX'])
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 logger = logging.getLogger(__name__)

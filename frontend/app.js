@@ -27,9 +27,9 @@ const app = Vue.createApp({
             this.showSejmWords = true;
             resetState(this);
             this.tweets = [];
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 200 } })
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 1000 } })
             for (const data of response.data) {
-                this.tweets.push({word: data.word, count: data.count });
+                this.tweets.push({ word: data.word, count: data.count });
             }
 
         },
@@ -37,10 +37,20 @@ const app = Vue.createApp({
             this.showPartyWords = true;
             this.showPoliticsWords = false;
             this.showSejmWords = false;
-            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
-            this.parties = response.data
             this.showPoliticsFromSejm = false;
             this.showParties = !this.showParties;
+
+
+            const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/parties')
+            this.parties = response.data
+            for(const party of this.parties){
+                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: { limit: 100, party: party.id } })
+                for (const data of response.data) {
+                    this.tweets.push({name: party.name, word: partyWords.word, count: partyWords.count });
+                }
+            }
+            this.tweets.sort((a,b)=> (a.count>b.count)?1:-1)
+
         },
         async getPoselsFromParty(party) {
             this.showPartyWords = false;
@@ -77,14 +87,15 @@ const app = Vue.createApp({
         }
     },
     async created() {
-        const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words', { params: { limit: 200 } })
-        const politiciansResponse = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/politicians')
+        console.log(this);
+        this.showPartyWords = false;
+        this.showPoliticsWords = false;
+        this.showSejmWords = true;
+        resetState(this);
+        this.tweets = [];
+        const response = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/sejm', { params: { limit: 1000 } })
         for (const data of response.data) {
-            for (const politician of politiciansResponse.data) {
-                if (data.politician_id === politician.twitter_id) {
-                    this.tweets.push({ name: politician.name, word: data.word, count: data.count });
-                }
-            }
+            this.tweets.push({ word: data.word, count: data.count });
         }
     }
 
