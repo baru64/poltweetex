@@ -2,11 +2,14 @@ import * as azuread from "@pulumi/azuread";
 import * as pulumi from "@pulumi/pulumi";
 import * as random from "@pulumi/random";
 import * as tls from "@pulumi/tls";
+import * as azure from "@pulumi/azure";
 
 import * as containerservice from "@pulumi/azure-native/containerservice";
 import * as resources from "@pulumi/azure-native/resources";
 import * as containerregistry from "@pulumi/azure-native/containerregistry";
 import * as storage from "@pulumi/azure-native/storage";
+import * as insights from "@pulumi/azure-native/insights";
+import * as subscription from "@pulumi/azure-native/subscription";
 
 const resourceGroup = new resources.ResourceGroup("resourceGroup");
 
@@ -135,6 +138,51 @@ const cluster = new containerservice.ManagedCluster(managedClusterName, {
         clientId: adApp.applicationId,
         secret: adSpPassword.value,
     },
+});
+
+const loganalytics = new azure.operationalinsights.AnalyticsWorkspace("aksloganalytics", {
+    resourceGroupName: resourceGroup.name,
+    location: resourceGroup.location,
+    sku: "PerGB2018",
+    retentionInDays: 30,
+});
+
+const azMonitoringDiagnostic = new azure.monitoring.DiagnosticSetting("aks", {
+    logAnalyticsWorkspaceId: loganalytics.id,
+    targetResourceId: cluster.id,
+    logs:  [
+        {
+            category: "kube-apiserver",
+            enabled : true,
+
+            retentionPolicy: {
+                enabled: true,
+            },
+        },
+        {
+            category: "kube-audit",
+            enabled : true,
+
+            retentionPolicy: {
+                enabled: true,
+            },
+        },
+        {
+            category: "kube-audit-admin",
+            enabled : true,
+
+            retentionPolicy: {
+                enabled: true,
+            },
+        },
+    ],
+    metrics: [{
+        category: "AllMetrics",
+
+        retentionPolicy: {
+            enabled: true,
+        },
+    }],
 });
 
 const registry = new containerregistry.Registry("registry", {
