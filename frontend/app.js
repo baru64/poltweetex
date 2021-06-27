@@ -45,7 +45,7 @@ const app = Vue.createApp({
             this.parties = response.data
             for(const party of this.parties){
                 console.log(party.id);
-                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: { limit: 100, party: party.id } })
+                const partyWords = await axios.get('https://poltweetex.northeurope.cloudapp.azure.com/words/party', { params: {  party: party.id, limit: 1000 } })
                 console.log(partyWords);
                 for (const data of partyWords.data) {
                     console.log(data);
